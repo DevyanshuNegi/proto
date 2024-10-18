@@ -10,7 +10,7 @@
     "clientBuild": "cd client && npm run build",
     "client": "cd client && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install": "cd client && npm install && cd .. && npm install"
+    "install": "npm install && npm install --prefix client"
   },
   "keywords": [],
   "author": "",
