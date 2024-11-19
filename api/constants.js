@@ -1,1 +1,1 @@
-export const DB_NAME = "SevaHub"
+export const DB_NAME = "Seva-Hub"
