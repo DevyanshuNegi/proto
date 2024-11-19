@@ -33,8 +33,12 @@ const userSchema = new Schema(
         },
         occupation: {
             type: String,
-            default: "",
+            default: NaN,
             
+        },
+        past_volunteered: {
+            type: Schema.Types.ObjectId,
+            ref: ""
         },
         password: {
             type: String,
