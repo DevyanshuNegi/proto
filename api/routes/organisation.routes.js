@@ -6,15 +6,31 @@ import {
     refreshAccessToken, 
     changeCurrentPassword, 
     getCurrentUser, 
+    
+
+    registerOrganisation
    
-} from "../controllers/user.controller.js";
+} from "../controllers/organisation.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-
-
 const router = Router()
 
-router.route("/register").post(registerUser)
+router.route("/register").post( // MW, mainFunction
+
+    upload.fields([ // accepts array
+        {
+            name: "eightyG",
+            maxCount: 1
+        },
+        {
+            name: "TwelveA",
+            maxCount: 1
+        }
+    ]),
+    registerOrganisation
+)
+
+// router.route("/register").post(registerUser)
 
 router.route("/login").post(loginUser)
 
@@ -22,7 +38,7 @@ router.route("/login").post(loginUser)
 router.route("/logout").post(verifyJWT,  logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
-router.route("/current-user").get(verifyJWT, getCurrentUser)
+// router.route("/current-user").get(verifyJWT, getCurrentUser)
 
 
 export default router
