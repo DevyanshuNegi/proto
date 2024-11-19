@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 
 const userSchema = new Schema(
     {
-        username: {
+        name: {
             type: String,
             required: true,
             unique: true,
@@ -19,11 +19,22 @@ const userSchema = new Schema(
             lowecase: true,
             trim: true, 
         },
-        fullName: {
-            type: String,
+        phone_No: {
+            type: Number,
             required: true,
-            trim: true, 
-            index: true
+        },
+        age: {
+            type: Number,
+        },
+        gender: {
+            type: String,
+            enum: ["male", "female", "other"],
+
+        },
+        occupation: {
+            type: String,
+            default: "",
+            
         },
         password: {
             type: String,
