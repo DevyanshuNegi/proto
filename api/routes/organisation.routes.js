@@ -1,14 +1,11 @@
 import { Router } from "express";
 import { 
-    loginUser, 
-    logoutUser, 
-    registerUser, 
-    refreshAccessToken, 
-    changeCurrentPassword, 
-    getCurrentUser, 
-    
-
-    registerOrganisation
+    registerOrganisation,
+    loginOrganisation,
+    logoutOrganisation,
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentOrganisation
    
 } from "../controllers/organisation.controller.js";
 
@@ -32,13 +29,13 @@ router.route("/register").post( // MW, mainFunction
 
 // router.route("/register").post(registerUser)
 
-router.route("/login").post(loginUser)
+router.route("/login").post(loginOrganisation)
 
 //secured routes
-router.route("/logout").post(verifyJWT,  logoutUser)
+router.route("/logout").post(verifyJWT,  logoutOrganisation)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
-// router.route("/current-user").get(verifyJWT, getCurrentUser)
+// router.route("/current-user").get(verifyJWT, getCurrentOrganisation)
 
 
 export default router
