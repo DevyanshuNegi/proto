@@ -52,7 +52,7 @@ function Navbar() {
           to="/auth/admin-login"
           className="md:py-3 md:hover:text-blue-500 transition-all ease-linear"
         >
-          AdminLogin
+          Org.Login
         </Link>
         <Link
           to="/auth/login"
