@@ -21,7 +21,7 @@ export default function SignIn() {
       password: pass,
     };
 
-    let response = await fetch("http://localhost:3000/api/auth/login", {
+    let response = await fetch("http://localhost:3000/api/v1/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,18 +32,18 @@ export default function SignIn() {
     let result = await response.json();
 
     if (result.success) {
-      localStorage.setItem("token", result.data.token);
-      let student = await fetch("http://localhost:3000/api/student/get-student", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          isAdmin: result.data.user.isAdmin,
-          token: result.data.token})
-      });
+      // localStorage.setItem("token", result.data.token);
+      // let student = await fetch("http://localhost:3000/api/v1/users/current-user", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     isAdmin: result.data.user.isAdmin,
+      //     token: result.data.token})
+      // });
 
-      let studentResult = await student.json();
+      // let studentResult = await student.json();
       if (studentResult.success) {
         localStorage.setItem("student", JSON.stringify(studentResult.student));
         navigate("/student-dashboard");
