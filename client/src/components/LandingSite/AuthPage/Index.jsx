@@ -24,7 +24,7 @@ export default function AuthPage() {
               />
             </svg>
             &nbsp;
-            Hostel Management System
+            Seva Hub
           </a>
           <Outlet />
         </div>
