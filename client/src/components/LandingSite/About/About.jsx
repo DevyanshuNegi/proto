@@ -2,32 +2,32 @@ import { TeamCard } from "./TeamMember";
 function About() {
 
   const ahad = {
-    name: "Abdul Ahad",
-    designation: "Front-end Engineer",
+    name: "Devyanshu Negi 23BCE10205",
+    designation: "Full Stack Developer",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const danish = {
-    name: "Muhammad Danish",
-    designation: "Backend-end Engineer",
+    name: "Gyanendra Thakur 23BCE10433",
+    designation: "Frontened Developer",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const abubakar = {
-    name: "Muhammad Abubakar",
-    designation: "Front End Developer",
+    name: "Summit Kumar Singh 23BCE10226",
+    designation: "Luada",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const muneeb = {
-    name: "Muneeb Ahmed",
-    designation: "Front End Developer",
+    name: "Ayush Agarwal 23BCE10678",
+    designation: "Helper",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const arsal = {
-    name: "Syed Arsal",
-    designation: "Database",
+    name: "Somil Asarti 23BCE10364",
+    designation: "Helper",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
