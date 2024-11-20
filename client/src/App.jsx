@@ -25,6 +25,7 @@ import AdminInvoices from './components/Dashboards/AdminDashboard/Invoices'
 import AdminSuggestions from './components/Dashboards/AdminDashboard/Suggestions'
 import AdminSettings from './components/Dashboards/AdminDashboard/Settings'
 import AllStudents from "./components/Dashboards/AdminDashboard/AllStudents";
+import OrgSignup from "./components/LandingSite/AuthPage/OrgSignUp";
 import AdminMess from "./components/Dashboards/AdminDashboard/MessOff";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
             <Route path="signup" element={<SignUp />} />
             <Route path="login" element={<SignIn />} />
             <Route path="request" element={<SignUp />} />
+            <Route path="org-signup" element={<OrgSignup />} />
             <Route path="admin-login" element={<AdminSignIn />} />
           </Route>
         </Route>
