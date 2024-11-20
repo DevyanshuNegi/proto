@@ -1,20 +1,20 @@
 import { asyncHandler } from "../utils/asynchandler.js";
 import {ApiError} from "../utils/ApiError.js"
-import { User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
+import {Organisation} from "../models/organisation.model.js"
 
 
-const generateAccessAndRefereshTokens = async(userId) =>{
+const generateAccessAndRefereshTokens = async(organisationId) =>{
     try {
-        const user = await User.findById(userId)
-        const accessToken = user.generateAccessToken()
-        const refreshToken = user.generateRefreshToken()
+        const organisation = await organisation.findById(organisationId)
+        const accessToken = organisation.generateAccessToken()
+        const refreshToken = organisation.generateRefreshToken()
 
-        user.refreshToken = refreshToken
-        await user.save({ validateBeforeSave: false })
+        organisation.refreshToken = refreshToken
+        await organisation.save({ validateBeforeSave: false })
 
         return {accessToken, refreshToken}
 
@@ -24,15 +24,15 @@ const generateAccessAndRefereshTokens = async(userId) =>{
     }
 }
 
-const registerUser = asyncHandler( async (req, res) => {
-    // get user details from frontend
+const registerOrganisation = asyncHandler( async (req, res) => {
+    // get organisation details from frontend
     // validation - not empty
-    // check if user already exists: username, email
+    // check if organisation already exists: organisationname, email
     // check for images, check for avatar
     // upload them to cloudinary, avatar
-    // create user object - create entry in db
+    // create organisation object - create entry in db
     // remove password and refresh token field from response
-    // check for user creation
+    // check for organisation creation
     // return res
 
 
@@ -45,18 +45,17 @@ const registerUser = asyncHandler( async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
-    const existedUser = await User.findOne({
+    const existedOrganisation = await Organisation.findOne({
         $or: [{ leader_mail }, { name }]
     })
 
-    if (existedUser) {
-        throw new ApiError(409, "User with email or username already exists")
+    if (existedOrganisation) {
+        throw new ApiError(409, "organisation with email or organisationname already exists")
     }
     //console.log(req.files);
-
+    // TODO: check pdfs also
     const avatarLocalPath = req.files?.avatar[0]?.path;
     //const coverImageLocalPath = req.files?.coverImage[0]?.path;
-
     let coverImageLocalPath;
     if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
         coverImageLocalPath = req.files.coverImage[0].path
@@ -75,67 +74,67 @@ const registerUser = asyncHandler( async (req, res) => {
     }
    
 
-    const user = await User.create({
+    const organisation = await Organisation.create({
         fullName,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email, 
         password,
-        username: username.toLowerCase()
+        name: name.toLowerCase()
     })
 
-    const createdUser = await User.findById(user._id).select(
+    const createdorganisation = await organisation.findById(organisation._id).select(
         "-password -refreshToken"
     )
 
-    if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user")
+    if (!createdorganisation) {
+        throw new ApiError(500, "Something went wrong while registering the organisation")
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User registered Successfully")
+        new ApiResponse(200, createdorganisation, "organisation registered Successfully")
     )
 
 } )
 
-const loginUser = asyncHandler(async (req, res) =>{
+const loginOrganisation = asyncHandler(async (req, res) =>{
     // req body -> data
-    // username or email
-    //find the user
+    // organisationname or email
+    //find the organisation
     //password check
     //access and referesh token
     //send cookie
 
-    const {email, username, password} = req.body
+    const {email, organisationname, password} = req.body
     console.log(email);
 
-    if (!username && !email) {
-        throw new ApiError(400, "username or email is required")
+    if (!organisationname && !email) {
+        throw new ApiError(400, "organisationname or email is required")
     }
     
     // Here is an alternative of above code based on logic discussed in video:
-    // if (!(username || email)) {
-    //     throw new ApiError(400, "username or email is required")
+    // if (!(organisationname || email)) {
+    //     throw new ApiError(400, "organisationname or email is required")
         
     // }
 
-    const user = await User.findOne({
-        $or: [{username}, {email}]
+    const organisation = await organisation.findOne({
+        $or: [{organisationname}, {email}]
     })
 
-    if (!user) {
-        throw new ApiError(404, "User does not exist")
+    if (!organisation) {
+        throw new ApiError(404, "organisation does not exist")
     }
 
-   const isPasswordValid = await user.isPasswordCorrect(password)
+   const isPasswordValid = await organisation.isPasswordCorrect(password)
 
    if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials")
+    throw new ApiError(401, "Invalid organisation credentials")
     }
 
-   const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id)
+   const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(organisation._id)
 
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+    const loggedInorganisation = await organisation.findById(organisation._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
@@ -150,17 +149,17 @@ const loginUser = asyncHandler(async (req, res) =>{
         new ApiResponse(
             200, 
             {
-                user: loggedInUser, accessToken, refreshToken
+                organisation: loggedInorganisation, accessToken, refreshToken
             },
-            "User logged In Successfully"
+            "organisation logged In Successfully"
         )
     )
 
 })
 
-const logoutUser = asyncHandler(async(req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
+const logoutOrganisation = asyncHandler(async(req, res) => {
+    await organisation.findByIdAndUpdate(
+        req.organisation._id,
         {
             $unset: {
                 refreshToken: 1 // this removes the field from document
@@ -180,7 +179,7 @@ const logoutUser = asyncHandler(async(req, res) => {
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
-    .json(new ApiResponse(200, {}, "User logged Out"))
+    .json(new ApiResponse(200, {}, "organisation logged Out"))
 })
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
@@ -196,13 +195,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET
         )
     
-        const user = await User.findById(decodedToken?._id)
+        const organisation = await organisation.findById(decodedToken?._id)
     
-        if (!user) {
+        if (!organisation) {
             throw new ApiError(401, "Invalid refresh token")
         }
     
-        if (incomingRefreshToken !== user?.refreshToken) {
+        if (incomingRefreshToken !== organisation?.refreshToken) {
             throw new ApiError(401, "Refresh token is expired or used")
             
         }
@@ -212,7 +211,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             secure: true
         }
     
-        const {accessToken, newRefreshToken} = await generateAccessAndRefereshTokens(user._id)
+        const {accessToken, newRefreshToken} = await generateAccessAndRefereshTokens(organisation._id)
     
         return res
         .status(200)
@@ -236,38 +235,39 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 
     
 
-    const user = await User.findById(req.user?._id)
-    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+    const organisation = await organisation.findById(req.organisation?._id)
+    const isPasswordCorrect = await organisation.isPasswordCorrect(oldPassword)
 
     if (!isPasswordCorrect) {
         throw new ApiError(400, "Invalid old password")
     }
 
-    user.password = newPassword
-    await user.save({validateBeforeSave: false})
+    organisation.password = newPassword
+    await organisation.save({validateBeforeSave: false})
 
     return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully"))
 })
 
-const getCurrentUser = asyncHandler(async(req, res) => {
+const getCurrentOrganisation = asyncHandler(async(req, res) => {
     return res
     .status(200)
     .json(new ApiResponse(
         200,
-        req.user,
-        "User fetched successfully"
+        req.organisation,
+        "organisation fetched successfully"
     ))
 })
 
 
 
 export {
-    registerUser,
-    loginUser,
-    logoutUser,
+    registerOrganisation,
+
+    loginOrganisation,
+    logoutOrganisation,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentUser
+    getCurrentOrganisation
 }
