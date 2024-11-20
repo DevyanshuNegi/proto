@@ -3,13 +3,13 @@ import {ApiError} from "../utils/ApiError.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import {Organisation} from "../models/organisation.model.js"
 
 
 const generateAccessAndRefereshTokens = async(organisationId) =>{
     try {
-        const organisation = await organisation.findById(organisationId)
+        const organisation = await Organisation.findById(organisationId)
         const accessToken = organisation.generateAccessToken()
         const refreshToken = organisation.generateRefreshToken()
 
@@ -105,10 +105,10 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
     //access and referesh token
     //send cookie
 
-    const {email, organisationname, password} = req.body
-    console.log(email);
+    const {email , password} = req.body
+    // console.log(email);
 
-    if (!organisationname && !email) {
+    if ( !email) {
         throw new ApiError(400, "organisationname or email is required")
     }
     
@@ -118,8 +118,8 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
         
     // }
 
-    const organisation = await organisation.findOne({
-        $or: [{organisationname}, {email}]
+    const organisation = await Organisation.findOne({
+        $or: [{email}]
     })
 
     if (!organisation) {
@@ -134,7 +134,7 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
 
    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(organisation._id)
 
-    const loggedInorganisation = await organisation.findById(organisation._id).select("-password -refreshToken")
+    const loggedInorganisation = await Organisation.findById(organisation._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
@@ -158,7 +158,7 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
 })
 
 const logoutOrganisation = asyncHandler(async(req, res) => {
-    await organisation.findByIdAndUpdate(
+    await Organisation.findByIdAndUpdate(
         req.organisation._id,
         {
             $unset: {
@@ -264,7 +264,6 @@ const getCurrentOrganisation = asyncHandler(async(req, res) => {
 
 export {
     registerOrganisation,
-
     loginOrganisation,
     logoutOrganisation,
     refreshAccessToken,

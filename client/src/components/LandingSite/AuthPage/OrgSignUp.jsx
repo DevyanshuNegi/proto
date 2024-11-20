@@ -75,6 +75,7 @@ export default function OrgSignup() {
     const [description, setDescription] = useState("");
     const [started_at, setStarted_at] = useState("");
     const [name, setName] = useState("");
+    
 
 
     const changeEmail = (event) => {
