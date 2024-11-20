@@ -1,7 +1,7 @@
 import { Input } from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { verifysession } from "../../../utils/";
+import { verifysession } from "../../../utils";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader } from "../../Dashboards/Common/Loader";
@@ -21,7 +21,7 @@ export default function SignIn() {
       password: pass,
     };
 
-    let response = await fetch("http://localhost:3000/api/v1/users/login", {
+    let response = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,18 +32,19 @@ export default function SignIn() {
     let result = await response.json();
 
     if (result.success) {
-      // localStorage.setItem("token", result.data.token);
-      // let student = await fetch("http://localhost:3000/api/v1/users/current-user", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     isAdmin: result.data.user.isAdmin,
-      //     token: result.data.token})
-      // });
+      localStorage.setItem("token", result.data.token);
+      let student = await fetch("http://localhost:3000/api/student/get-student", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          isAdmin: result.data.user.isAdmin,
+          token: result.data.token
+        })
+      });
 
-      // let studentResult = await student.json();
+      let studentResult = await student.json();
       if (studentResult.success) {
         localStorage.setItem("student", JSON.stringify(studentResult.student));
         navigate("/student-dashboard");
@@ -70,12 +71,21 @@ export default function SignIn() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [loader, setLoader] = useState(false)
+  const [name, setName]  = useState("");
+  const [phone, setPhone] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [occupation, setOccupation] = useState("");
+
 
   const changeEmail = (event) => {
     setEmail(event.target.value);
   };
   const changePass = (event) => {
     setPass(event.target.value);
+  };
+  const changeName = (event) => {
+    setName(event.target.value);
   };
 
   const iemail = {
@@ -92,16 +102,42 @@ export default function SignIn() {
     req: true,
     onChange: changePass,
   };
+  const iname = {
+    name: "name",
+    type: "text",
+    placeholder: "Devyanshu Negi",
+    req: true,
+    onChange: changeName,
+  };
+  const iphone = {
+    name: "phone",
+    type: "number",
+    placeholder: "1234567890",
+    req: true,
+    onChange: (event) => setPhone(event.target.value),
+  };
+  const iage = {
+    name: "age",
+    type: "number",
+    placeholder: "20",
+    req: true,
+    onChange: (event) => setAge(event.target.value),
+  };
+  
 
   return (
     <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
-          Sign in to your account
+          Register your account
         </h1>
         <form className="space-y-4 md:space-y-6" onSubmit={login}>
           <Input field={iemail} />
           <Input field={password} />
+          <Input field={iname} />
+          <Input field={iphone} />
+          <Input field={iage} />
+
           <div className="flex items-center justify-between">
             <div className="flex items-start">
               <div className="flex items-center h-5">
@@ -145,12 +181,12 @@ export default function SignIn() {
             theme="dark"
           />
           <p className="text-sm font-light text-gray-400">
-            Don’t have an account yet?{" "}
+            Already have an account{" "}
             <Link
-              to="/auth/signup"
+              to="/auth/login"
               className="font-medium hover:underline text-blue-500"
             >
-              Register
+              Login
             </Link>
           </p>
         </form>
