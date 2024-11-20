@@ -12,20 +12,7 @@ import {
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router()
 
-router.route("/register").post( // MW, mainFunction
-
-    upload.fields([ // accepts array
-        {
-            name: "eightyG",
-            maxCount: 1
-        },
-        {
-            name: "TwelveA",
-            maxCount: 1
-        }
-    ]),
-    registerOrganisation
-)
+router.route("/register").post(registerOrganisation)
 
 // router.route("/register").post(registerUser)
 

@@ -2,81 +2,126 @@ import { Input } from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { verifysession } from "../../../utils";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
-
+import axios from "axios";
 export default function SignIn() {
-  let navigate = useNavigate();
-
-  if (localStorage.getItem("token")) {
-    verifysession();
-  }
-
-  let login = async (event) => {
-    event.preventDefault();
-    setLoader(true);
-    let data = {
-      email: email,
-      password: pass,
-    };
-
-    let response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data)
-    });
-
-    let result = await response.json();
-
-    if (result.success) {
-      localStorage.setItem("token", result.data.token);
-      let student = await fetch("http://localhost:3000/api/student/get-student", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          isAdmin: result.data.user.isAdmin,
-          token: result.data.token
-        })
-      });
-
-      let studentResult = await student.json();
-      if (studentResult.success) {
-        localStorage.setItem("student", JSON.stringify(studentResult.student));
-        navigate("/student-dashboard");
-      } else {
-        // console.log(studentResult.errors)
-      }
-    } else {
-      // alert(result.errors[0].msg);
-      toast.error(
-        result.errors[0].msg, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      })
-    }
-    setLoader(false);
-  };
-
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [loader, setLoader] = useState(false)
-  const [name, setName]  = useState("");
+  const [loader, setLoader] = useState(false);
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [occupation, setOccupation] = useState("");
 
+  let navigate = useNavigate();
+
+  // if (localStorage.getItem("token")) {
+  //   verifysession();
+  // }
+
+  let login = async (event) => {
+    event.preventDefault();
+    setLoader(true);
+    // let data = {
+    //   email: email,
+    //   password: pass,
+    //   name,
+    //   phone_No: phone,
+    //   age,
+    //   gender: "male",
+    //   occupation: "Doctor"
+    // };
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", pass);
+    formData.append("name", name);
+    formData.append("phone_No", phone);
+    formData.append("age", age);
+    formData.append("gender", "male");
+    formData.append("occupation", "Doctor");
+    axios
+      .post("api/v1/users/register", formData)
+      .then((Response) => {
+        console.log(Response.data);
+        navigate("/student-dashboard");
+      })
+      .catch((error) => {
+        setLoader(false);
+        // alert(result.errors[0].msg);
+        toast.error(result.errors[0].msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        console.log("this is chatched error");
+        console.error(error);
+        console.log("status code is ", error.response.status);
+        const statusCode = error.response.status;
+        if (statusCode == 400) {
+          // Empty field
+          setError("Cannot Be Empty");
+        } else if (statusCode == 409) {
+          // User already exist
+          setError("User Already Exist");
+        }
+      });
+    // let response = await fetch("api/v1/users/register", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({data})
+    // });
+
+    // let result = await response.json();
+
+    // if (result.success) {
+    //   // localStorage.setItem("token", result.data.token);
+    //   // let student = await fetch("http://localhost:3000/api/student/get-student", {
+    //   //   method: "POST",
+    //   //   headers: {
+    //   //     "Content-Type": "application/json",
+    //   //   },
+    //   //   body: JSON.stringify({
+    //   //     isAdmin: result.data.user.isAdmin,
+    //   //     token: result.data.token
+    //   //   })
+    //   // });
+
+    //   // let studentResult = await student.json();
+    //   // if (studentResult.success) {
+    //   //   localStorage.setItem("student", JSON.stringify(studentResult.student));
+    //   //   navigate("/student-dashboard");
+    //   // } else {
+    //   //   // console.log(studentResult.errors)
+    //   // }
+    //   setLoader(false);
+    //   result.status === 201 && navigate("/student-dashboard");
+    // } else {
+    //   setLoader(false);
+    //   // alert(result.errors[0].msg);
+    //   toast.error(
+    //     result.errors[0].msg, {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "dark",
+    //   })
+    // }
+  };
 
   const changeEmail = (event) => {
     setEmail(event.target.value);
@@ -123,7 +168,6 @@ export default function SignIn() {
     req: true,
     onChange: (event) => setAge(event.target.value),
   };
-  
 
   return (
     <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">

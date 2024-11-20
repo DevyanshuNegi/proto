@@ -9,9 +9,9 @@ import { Loader } from "../../Dashboards/Common/Loader";
 export default function SignIn() {
   let navigate = useNavigate();
 
-  if (localStorage.getItem("token")) {
-    verifysession();
-  }
+  // if (localStorage.getItem("token")) {
+  //   verifysession();
+  // }
 
   let login = async (event) => {
     event.preventDefault();
@@ -21,7 +21,7 @@ export default function SignIn() {
       password: pass,
     };
 
-    let response = await fetch("http://localhost:3000/api/v1/users/login", {
+    let response = await fetch("api/v1/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,12 +44,13 @@ export default function SignIn() {
       // });
 
       // let studentResult = await student.json();
-      if (studentResult.success) {
-        localStorage.setItem("student", JSON.stringify(studentResult.student));
-        navigate("/student-dashboard");
-      } else {
-        // console.log(studentResult.errors)
-      }
+      // if (studentResult.success) {
+      //   localStorage.setItem("student", JSON.stringify(studentResult.student));
+      //   navigate("/student-dashboard");
+      // } else {
+      //   // console.log(studentResult.errors)
+      // }
+      result.status === 200 && navigate("/student-dashboard");
     } else {
       // alert(result.errors[0].msg);
       toast.error(
