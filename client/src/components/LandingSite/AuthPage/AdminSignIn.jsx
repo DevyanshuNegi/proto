@@ -171,12 +171,12 @@ export default function AdminSignIn() {
             theme="dark"
           />
           <p className="text-sm font-light text-gray-400">
-            You&apos;re a student?{" "}
+            You&apos;re not registered ?{" "}
             <Link
-              to="/auth/login"
+              to="/auth/org-signup"
               className="font-medium hover:underline text-blue-500"
             >
-              Signin Here.
+              Register Here.
             </Link>
           </p>
         </form>

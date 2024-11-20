@@ -132,6 +132,12 @@ export default function SignIn() {
   const changeName = (event) => {
     setName(event.target.value);
   };
+  const changeOccupation = (event) => {
+    setOccupation(event.target.value);
+  };
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
+  }
 
   const iemail = {
     name: "email",
@@ -168,9 +174,17 @@ export default function SignIn() {
     req: true,
     onChange: (event) => setAge(event.target.value),
   };
+  const ioccupation = {
+    name: "occupation",
+    type: "text",
+    placeholder: "Student",
+    req: false,
+    onChange: changeOccupation,
+  };
+  
 
   return (
-    <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
+    <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700 absolute top-[15vh]">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
           Register your account
@@ -181,6 +195,23 @@ export default function SignIn() {
           <Input field={iname} />
           <Input field={iphone} />
           <Input field={iage} />
+          <Input field={ioccupation} />
+          <div>
+            <label htmlFor="gender" className="block mb-2 text-sm font-medium text-white">Gender</label>
+            <select
+              name="gender"
+              id="gender"
+              className="border sm:text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 outline-none"
+              required
+              value={gender}
+              onChange={handleGenderChange}
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-start">
