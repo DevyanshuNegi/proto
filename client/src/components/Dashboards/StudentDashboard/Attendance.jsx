@@ -37,18 +37,18 @@ function Attendance() {
   const [daysOff, setDaysOff] = useState(0); //!Fetch from database
   const [thisWeek, setThisWeek] = useState([]); //!Fetch from database
 
-  const labels = ["Days off", "Days present"];
+  const labels = ["Past Participated", "Past Voulenteered"];
 
   useEffect(() => {
     getAttendance();
   }, [ daysOff.length, thisWeek.length ]);
   return (
     <div className="w-full h-screen flex flex-col gap-5 items-center justify-center max-h-screen overflow-y-auto pt-20 md:pt-0 ">
-      <h1 className="text-white font-bold text-5xl">Attendance</h1>
+      <h1 className="text-white font-bold text-5xl">Past Events</h1>
       <ul className="flex gap-5 text-white text-xl px-5 sm:p-0 text-center">
-        <li>Total Days: {totalDays}</li>
-        <li>Present Days: {totalDays - daysOff}</li>
-        <li>Absent days: {daysOff}</li>
+        <li>Total Events: {16}</li>
+        <li>Participated In: {13}</li>
+        <li>Voulenteered In: {3}</li>
       </ul>
       <div className="flex gap-5 flex-wrap max-h-96 justify-center items-center">
         <Doughnut
@@ -57,8 +57,8 @@ function Attendance() {
             labels,
             datasets: [
               {
-                label: "days",
-                data: [daysOff, totalDays - daysOff],
+                label: "Events",
+                data: [13, 3],
                 backgroundColor: ["#F26916", "#1D4ED8"],
                 barThickness: 40,
                 borderRadius: 5,
