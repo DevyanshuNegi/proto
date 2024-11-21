@@ -5,7 +5,7 @@ import { verifysession } from "../../../utils/";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader } from "../../Dashboards/Common/Loader";
-
+import axios from "axios";
 export default function SignIn() {
   let navigate = useNavigate();
 
@@ -21,51 +21,77 @@ export default function SignIn() {
       password: pass,
     };
 
-    let response = await fetch("api/v1/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data)
-    });
+    axios.post("http://localhost:8000/api/v1/users/login",data , { headers: { 'Content-Type': 'application/json' }})
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+        navigate("/student-dashboard");
+      })  
+      .catch((error) => {
+        setLoader(false);
+        // alert(result.errors[0].msg);
+        // toast.error(result.errors[0].msg, {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "dark",
+        // });
+        console.log("this is chatched error");
+        console.error(error);
+        console.log("status code is ", error.response.status);
+        const statusCode = error.response.status;
+        if (statusCode == 400) {
+          // Empty field
+          setError("Cannot Be Empty");
+        } else if (statusCode == 409) {
+          // User already exist
+          setError("User Already Exist");
+        }
+      });
 
-    let result = await response.json();
 
-    if (result.success) {
-      // localStorage.setItem("token", result.data.token);
-      // let student = await fetch("http://localhost:3000/api/v1/users/current-user", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     isAdmin: result.data.user.isAdmin,
-      //     token: result.data.token})
-      // });
+    // if (response.success) {
+    //   // localStorage.setItem("token", result.data.token);
+    //   // let student = await fetch("http://localhost:3000/api/v1/users/current-user", {
+    //   //   method: "POST",
+    //   //   headers: {
+    //   //     "Content-Type": "application/json",
+    //   //   },
+    //   //   body: JSON.stringify({
+    //   //     isAdmin: result.data.user.isAdmin,
+    //   //     token: result.data.token})
+    //   // });
 
-      // let studentResult = await student.json();
-      // if (studentResult.success) {
-      //   localStorage.setItem("student", JSON.stringify(studentResult.student));
-      //   navigate("/student-dashboard");
-      // } else {
-      //   // console.log(studentResult.errors)
-      // }
-      result.status === 200 && navigate("/student-dashboard");
-    } else {
-      // alert(result.errors[0].msg);
-      toast.error(
-        result.errors[0].msg, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      })
-    }
-    setLoader(false);
+    //   // let studentResult = await student.json();
+    //   // if (studentResult.success) {
+    //   //   localStorage.setItem("student", JSON.stringify(studentResult.student));
+    //   //   navigate("/student-dashboard");
+    //   // } else {
+    //   //   // console.log(studentResult.errors)
+    //   // }setLoader(false);
+    //   setLoader(false);
+    //   console.log(response.status)
+    //   response.status === 200 && navigate("/student-dashboard");
+    // } else {
+    //   // alert(result.errors[0].msg);
+    //   setLoader(false);
+    //   // toast.error(
+    //   //   result.errors[0].msg, {
+    //   //   position: "top-right",
+    //   //   autoClose: 3000,
+    //   //   hideProgressBar: false,
+    //   //   closeOnClick: true,
+    //   //   pauseOnHover: true,
+    //   //   draggable: true,
+    //   //   progress: undefined,
+    //   //   theme: "dark",
+    //   // })
+    // }
+    
   };
 
   const [email, setEmail] = useState("");
