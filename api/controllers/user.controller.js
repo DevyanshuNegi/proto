@@ -108,7 +108,7 @@ const loginUser = asyncHandler(async (req, res) => {
   //send cookie
 
   const { email, username, password } = req.body;
-  console.log(email);
+//   console.log(email);
 
   if (!username && !email) {
     throw new ApiError(400, "username or email is required");
@@ -127,9 +127,9 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(404, "User does not exist");
   }
-
+//   console.log(password);
   const isPasswordValid = await user.isPasswordCorrect(password);
-
+//   console.log(isPasswordValid);
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid user credentials");
   }
