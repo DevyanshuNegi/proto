@@ -6,7 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
-export default function SignIn() {
+// import qs from "qs";
+export default function SignUp
+() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [loader, setLoader] = useState(false);
@@ -22,46 +24,48 @@ export default function SignIn() {
   //   verifysession();
   // }
 
-  let login = async (event) => {
+  async function login(event) {
     event.preventDefault();
     setLoader(true);
-    // let data = {
-    //   email: email,
-    //   password: pass,
-    //   name,
-    //   phone_No: phone,
-    //   age,
-    //   gender: "male",
-    //   occupation: "Doctor"
-    // };
-
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", pass);
-    formData.append("name", name);
-    formData.append("phone_No", phone);
-    formData.append("age", age);
-    formData.append("gender", "male");
-    formData.append("occupation", "Doctor");
-    axios
-      .post("api/v1/users/register", formData)
-      .then((Response) => {
-        console.log(Response.data);
+    const data = {
+      email: email,
+      password: pass,
+      name,
+      phone_No: phone,
+      age,
+      gender: "male",
+      occupation: "Doctor"
+    };
+    // console.log(email)
+    // // console.log()
+    // const formData = new FormData();
+    // formData.append("email", email);
+    // formData.append("password", pass);
+    // formData.append("name", name);
+    // formData.append("phone_No", phone);
+    // formData.append("age", age);
+    // formData.append("gender", "male");
+    // formData.append("occupation", "Doctor");
+    console.log(data);
+    axios.post("http://localhost:8000/api/v1/users/register",data , { headers: { 'Content-Type': 'application/json' }})
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
         navigate("/student-dashboard");
-      })
+      })  
       .catch((error) => {
         setLoader(false);
         // alert(result.errors[0].msg);
-        toast.error(result.errors[0].msg, {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        // toast.error(result.errors[0].msg, {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "dark",
+        // });
         console.log("this is chatched error");
         console.error(error);
         console.log("status code is ", error.response.status);
