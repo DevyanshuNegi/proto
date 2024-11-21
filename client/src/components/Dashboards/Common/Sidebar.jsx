@@ -14,8 +14,8 @@ Sidebar.propTypes = {
 function Sidebar({ links }) {
   const navigate = useNavigate();
   let logout = () => {
-    localStorage.removeItem("student");
-    localStorage.removeItem("token");
+    // localStorage.removeItem("student");
+    // localStorage.removeItem("token");
     navigate("/");
   };
   const [isOpen, setIsOpen] = useState(true);

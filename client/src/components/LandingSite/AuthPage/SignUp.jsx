@@ -6,9 +6,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
+import { UserContext } from "../../contexts/UserContext";
+import { useContext } from "react";
+import useUser from "../../contexts/useUser";
 // import qs from "qs";
 export default function SignUp
 () {
+
+  const { user, setUser } = useUser();
+
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [loader, setLoader] = useState(false);
@@ -25,6 +31,7 @@ export default function SignUp
   // }
 
   async function login(event) {
+
     event.preventDefault();
     setLoader(true);
     const data = {
@@ -50,7 +57,9 @@ export default function SignUp
     axios.post("http://localhost:8000/api/v1/users/register",data , { headers: { 'Content-Type': 'application/json' }})
       .then((response) => {
         console.log(response);
-        console.log(response.data);
+        console.log("response da data",response.data);
+        setLoader(false);
+        setUser(response.data.data);
         navigate("/student-dashboard");
       })  
       .catch((error) => {

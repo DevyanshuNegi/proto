@@ -1,8 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../Common/Sidebar";
 import { Topbar } from "../Common/Topbar";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
 export default function Index() {
+  const {user} = useContext(UserContext);
+  console.log(user);
+
   const dashboard = "student";
   const links = [
     {
@@ -27,7 +32,7 @@ export default function Index() {
       ),
     },
     {
-      text: "Mess Off",
+      text: "Upcoming Evets",
       url: "/student-dashboard/mess",
       svg: (
         <svg
@@ -46,7 +51,7 @@ export default function Index() {
       ),
     },
     {
-      text: "Attendance",
+      text: "Past Events",
       url: "/student-dashboard/attendance",
       svg: (
         <svg
@@ -108,7 +113,7 @@ export default function Index() {
       ),
     },
     {
-      text: "Suggestions",
+      text: "Feedback",
       url: "/student-dashboard/suggestions",
       svg: (
         <svg
@@ -129,12 +134,16 @@ export default function Index() {
     },
   ];
 
-  const student = JSON.parse(localStorage.getItem("student"));
+  // const student = JSON.parse(localStorage.getItem("student"));
+  const student = {
+    name: "John Doe",
+  };
+  
 
   return (
     <div className="flex">
       <Sidebar links={links} />
-      <Topbar name={student.name} notifications={[]} />
+      <Topbar name={user.name} notifications={[]} />
       <div className="w-full bg-stone-900 h-screen">
         <Outlet />
       </div>

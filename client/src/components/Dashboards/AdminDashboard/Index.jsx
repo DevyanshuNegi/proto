@@ -48,7 +48,7 @@ export default function Index() {
       ),
     },
     {
-      text: "Attendance",
+      text: "Past Events",
       url: "/admin-dashboard/attendance",
       svg: (
         <svg
