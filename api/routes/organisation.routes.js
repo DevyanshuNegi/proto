@@ -12,6 +12,10 @@ import {
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router()
 
+router.route("/").get((req, res) => {
+    console.log("Hello World");
+    res.send("Hello World")
+})
 router.route("/register").post(registerOrganisation)
 
 // router.route("/register").post(registerUser)
