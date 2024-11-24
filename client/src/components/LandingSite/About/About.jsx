@@ -15,19 +15,19 @@ function About() {
   };
   const abubakar = {
     name: "Summit Kumar Singh 23BCE10226",
-    designation: "Luada",
+    designation: "Backend Developer",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const muneeb = {
     name: "Ayush Agarwal 23BCE10678",
-    designation: "Helper",
+    designation: "AI & ML Developer",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };
   const arsal = {
-    name: "Somil Asarti 23BCE10364",
-    designation: "Helper",
+    name: "Somil Asati 23BCE10364",
+    designation: "DBMS, Designer",
     image:
       "https://w7.pngwing.com/pngs/81/570/png-transparent-profile-logo-computer-icons-user-user-blue-heroes-logo-thumbnail.png",
   };

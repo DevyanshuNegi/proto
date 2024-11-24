@@ -170,7 +170,16 @@ export default function Index() {
     },
   ];
 
-  const admin = JSON.parse(localStorage.getItem("admin"));
+  let admin = null;
+  const adminData = localStorage.getItem("admin");
+  
+  if (adminData) {
+    try {
+      admin = JSON.parse(adminData);
+    } catch (error) {
+      console.error("Error parsing admin data from localStorage:", error);
+    }
+  }
 
   const [notifications, setNotifications] = useState([
     368115, 347403, 377902, 369420,

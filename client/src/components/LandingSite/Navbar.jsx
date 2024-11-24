@@ -55,6 +55,12 @@ function Navbar() {
           Org.Login
         </Link>
         <Link
+          to="/auth/signup"
+          className="md:py-3 md:hover:text-blue-500 transition-all ease-linear"
+        >
+          Register
+        </Link>
+        <Link
           to="/auth/login"
           className={`md:bg-blue-500 md:hover:bg-blue-700 transition md:text-white font-bold md:text-lg md:py-3 md:mb-3 md:px-8 md:rounded ${
             menuOpen ? "text-blue-500" : ""

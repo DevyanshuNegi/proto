@@ -23,7 +23,7 @@ export default function SignUp
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [occupation, setOccupation] = useState("");
-
+  const [error, setError] = useState("");
   let navigate = useNavigate();
 
   // if (localStorage.getItem("token")) {
@@ -43,42 +43,24 @@ export default function SignUp
       gender: "male",
       occupation: "Doctor"
     };
-    // console.log(email)
-    // // console.log()
-    // const formData = new FormData();
-    // formData.append("email", email);
-    // formData.append("password", pass);
-    // formData.append("name", name);
-    // formData.append("phone_No", phone);
-    // formData.append("age", age);
-    // formData.append("gender", "male");
-    // formData.append("occupation", "Doctor");
+
     console.log(data);
     axios.post("http://localhost:8000/api/v1/users/register",data , { headers: { 'Content-Type': 'application/json' }})
       .then((response) => {
         console.log(response);
-        console.log("response da data",response.data);
+        console.log("response da data da data",response.data.data);
         setLoader(false);
+        localStorage.setItem("token", response.data.data);
+        
         setUser(response.data.data);
         navigate("/student-dashboard");
       })  
       .catch((error) => {
-        setLoader(false);
-        // alert(result.errors[0].msg);
-        // toast.error(result.errors[0].msg, {
-        //   position: "top-right",
-        //   autoClose: 3000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: "dark",
-        // });
         console.log("this is chatched error");
         console.error(error);
         console.log("status code is ", error.response.status);
         const statusCode = error.response.status;
+
         if (statusCode == 400) {
           // Empty field
           setError("Cannot Be Empty");
@@ -86,6 +68,18 @@ export default function SignUp
           // User already exist
           setError("User Already Exist");
         }
+
+        setLoader(false);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
     // let response = await fetch("api/v1/users/register", {
     //   method: "POST",
@@ -97,18 +91,7 @@ export default function SignUp
 
     // let result = await response.json();
 
-    // if (result.success) {
-    //   // localStorage.setItem("token", result.data.token);
-    //   // let student = await fetch("http://localhost:3000/api/student/get-student", {
-    //   //   method: "POST",
-    //   //   headers: {
-    //   //     "Content-Type": "application/json",
-    //   //   },
-    //   //   body: JSON.stringify({
-    //   //     isAdmin: result.data.user.isAdmin,
-    //   //     token: result.data.token
-    //   //   })
-    //   // });
+
 
     //   // let studentResult = await student.json();
     //   // if (studentResult.success) {
