@@ -106,10 +106,11 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
     //send cookie
 
     const {email , password} = req.body
-    // console.log(email);
+    console.log(email);
 
     if ( !email) {
-        throw new ApiError(400, "organisationname or email is required")
+        // throw new ApiError(400, "organisationname or email is required")
+        return res.status(400).json(new ApiResponse(400, {}, "organisationname or email is required"))
     }
     
     // Here is an alternative of above code based on logic discussed in video:
@@ -123,13 +124,15 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
     })
 
     if (!organisation) {
-        throw new ApiError(404, "organisation does not exist")
+        // throw new ApiError(404, "organisation does not exist")
+        return res.status(404).json(new ApiResponse(404, {}, "organisation does not exist"))
     }
 
    const isPasswordValid = await organisation.isPasswordCorrect(password)
 
    if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid organisation credentials")
+    // throw new ApiError(401, "Invalid organisation credentials")
+    return res.status(401).json(new ApiResponse(401, {}, "Invalid organisation credentials"))
     }
 
    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(organisation._id)
