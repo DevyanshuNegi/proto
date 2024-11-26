@@ -27,6 +27,7 @@ import AdminSettings from './components/Dashboards/AdminDashboard/Settings'
 import AllStudents from "./components/Dashboards/AdminDashboard/AllStudents";
 import OrgSignup from "./components/LandingSite/AuthPage/OrgSignUp";
 import AdminMess from "./components/Dashboards/AdminDashboard/MessOff";
+import AddEvent from "./components/Dashboards/AdminDashboard/AddEvent";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
           <Route path="settings" element={<AdminSettings/>} />
           <Route path="all-students" element={<AllStudents/>}/>
           <Route path="mess" element={<AdminMess />} />
+          <Route path="add-event" element={<AddEvent />} />
         </Route>
       </Routes>
     </>

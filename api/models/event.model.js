@@ -10,7 +10,7 @@ const eventSchema = new Schema(
     },
     organizedBy: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Organisation",
     },
     eventDate: {
       type: Date,

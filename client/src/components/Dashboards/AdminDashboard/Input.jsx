@@ -11,8 +11,8 @@ Input.propTypes = {
     }).isRequired,
   };
 
-
 function Input({ field }) {
+  console.log("field",field);
     const name = (field.name).charAt(0).toUpperCase() + (field.name).slice(1);
     const placeholder = field.placeholder;
     const required = field.req;

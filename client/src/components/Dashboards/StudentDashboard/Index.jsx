@@ -71,7 +71,7 @@ export default function Index() {
       ),
     },
     {
-      text: "Invoices",
+      text: "Donation",
       url: "/student-dashboard/invoices",
       svg: (
         <svg

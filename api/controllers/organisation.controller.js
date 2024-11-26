@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 // import mongoose from "mongoose";
 import {Organisation} from "../models/organisation.model.js"
-
+import {Event} from "../models/event.model.js"
 
 const generateAccessAndRefereshTokens = async(organisationId) =>{
     try {
@@ -36,63 +36,63 @@ const registerOrganisation = asyncHandler( async (req, res) => {
     // return res
 
 
-    const { name, email, leader_mail, description, members, password } = req.body
-    // console.log("email: ", email);
+    const { name, email, description, password, started_at,  } = req.body
+    console.log("email: ", email);
 
     if (
-        [name, email, leader_mail, password].some((field) => field?.trim() === "")
+        [name, email,  password].some((field) => field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
 
-    const existedOrganisation = await Organisation.findOne({
-        $or: [{ leader_mail }, { name }]
-    })
+    // const existedOrganisation = await Organisation.findOne({
+    //     $or: [{ leader_mail }, { name }]
+    // })
+    const existedOrganisation = await Organisation.findOne({email});
 
     if (existedOrganisation) {
-        throw new ApiError(409, "organisation with email or organisationname already exists")
+        throw new ApiError(409, "organisation with email already exists")
     }
-    //console.log(req.files);
-    // TODO: check pdfs also
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    //const coverImageLocalPath = req.files?.coverImage[0]?.path;
-    let coverImageLocalPath;
-    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
-        coverImageLocalPath = req.files.coverImage[0].path
-    }
+    // //console.log(req.files);
+    // // TODO: check pdfs also
+    // const avatarLocalPath = req.files?.avatar[0]?.path;
+    // //const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // let coverImageLocalPath;
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageLocalPath = req.files.coverImage[0].path
+    // }
     
 
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "Avatar file is required")
-    }
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(400, "Avatar file is required")
+    // }
 
-    const avatar = await uploadOnCloudinary(avatarLocalPath)
-    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    // const avatar = await uploadOnCloudinary(avatarLocalPath)
+    // const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
-    if (!avatar) {
-        throw new ApiError(400, "Avatar file is required")
-    }
-   
+    // if (!avatar) {
+    //     throw new ApiError(400, "Avatar file is required")
+    // }
+
 
     const organisation = await Organisation.create({
-        fullName,
-        avatar: avatar.url,
-        coverImage: coverImage?.url || "",
         email, 
         password,
-        name: name.toLowerCase()
+        name: name,
+        description: description,
+        started_at: started_at,
     })
 
-    const createdorganisation = await organisation.findById(organisation._id).select(
+    const createdOrganisation = await Organisation.findById(organisation._id).select(
         "-password -refreshToken"
     )
 
-    if (!createdorganisation) {
+    if (!createdOrganisation) {
         throw new ApiError(500, "Something went wrong while registering the organisation")
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdorganisation, "organisation registered Successfully")
+        new ApiResponse(200, createdOrganisation, "organisation registered Successfully")
     )
 
 } )
@@ -106,30 +106,32 @@ const loginOrganisation = asyncHandler(async (req, res) =>{
     //send cookie
 
     const {email , password} = req.body
-    // console.log(email);
+    console.log(email);
+    console.log(password);
 
     if ( !email) {
-        throw new ApiError(400, "organisationname or email is required")
+        // throw new ApiError(400, "organisationname or email is required")
+        return res.status(400).json(new ApiResponse(400, {}, "organisationname or email is required"))
     }
-    
-    // Here is an alternative of above code based on logic discussed in video:
-    // if (!(organisationname || email)) {
-    //     throw new ApiError(400, "organisationname or email is required")
-        
-    // }
+    if (!password) {
+        // throw new ApiError(400, "organisationname or email is required")
+        return res.status(400).json(new ApiResponse(400, {}, "organisationname or email is required"))
+    }
 
     const organisation = await Organisation.findOne({
         $or: [{email}]
     })
 
     if (!organisation) {
-        throw new ApiError(404, "organisation does not exist")
+        // throw new ApiError(404, "organisation does not exist")
+        return res.status(404).json(new ApiResponse(404, {}, "organisation does not exist"))
     }
 
    const isPasswordValid = await organisation.isPasswordCorrect(password)
-
+    console.log("ispassword correct ", isPasswordValid);
    if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid organisation credentials")
+    // throw new ApiError(401, "Invalid organisation credentials")
+    return res.status(401).json(new ApiResponse(401, {}, "Invalid organisation credentials"))
     }
 
    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(organisation._id)
@@ -260,7 +262,25 @@ const getCurrentOrganisation = asyncHandler(async(req, res) => {
     ))
 })
 
+const addEvent = asyncHandler(async(req, res) => {
+    const {name, date, location, description} = req.body;
 
+    console.log(name, date, location);
+
+    if(!name || !date || !location){
+        // throw new ApiError(400, "All fields are required")
+        return res.status(400).json(new ApiResponse(400, {}, "All fields are required"))
+    }
+
+    const event = await Event.create({
+        name,
+        eventDate: date,
+        eventVenue: location,
+        organizedBy: req.organisation._id
+    })
+
+    return res.status(201).json(new ApiResponse(201, event, "Event added successfully"))
+});
 
 export {
     registerOrganisation,
@@ -268,5 +288,6 @@ export {
     logoutOrganisation,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentOrganisation
+    getCurrentOrganisation,
+    addEvent,
 }

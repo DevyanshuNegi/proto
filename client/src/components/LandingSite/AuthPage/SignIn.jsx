@@ -6,7 +6,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
+import { UserContext } from "../../contexts/UserContext";
+import { useContext } from "react";
+
 export default function SignIn() {
+  const { user, setUser } = useContext(UserContext);
   let navigate = useNavigate();
 
   // if (localStorage.getItem("token")) {
@@ -21,77 +25,36 @@ export default function SignIn() {
       password: pass,
     };
 
-    axios.post("http://localhost:8000/api/v1/users/login",data , { headers: { 'Content-Type': 'application/json' }})
+    axios.post("http://localhost:8000/api/v1/users/login", data, { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
-        console.log(response);
-        console.log(response.data);
+        setUser(response.data.data.user);
+        localStorage.setItem("token", response.data.data.token);
+        localStorage.setItem("student", JSON.stringify(response.data.data.user));
+        console.log("response.data.data.user", response.data.data.user);
+        console.log("response.data.data.token", response.data.data.token);
+
+
         navigate("/student-dashboard");
-      })  
+      })
       .catch((error) => {
-        setLoader(false);
-        // alert(result.errors[0].msg);
-        // toast.error(result.errors[0].msg, {
-        //   position: "top-right",
-        //   autoClose: 3000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: "dark",
-        // });
-        console.log("this is chatched error");
-        console.error(error);
-        console.log("status code is ", error.response.status);
+
         const statusCode = error.response.status;
-        if (statusCode == 400) {
-          // Empty field
-          setError("Cannot Be Empty");
-        } else if (statusCode == 409) {
-          // User already exist
-          setError("User Already Exist");
-        }
+        let errorMessage = error.response.data.message;
+
+        toast.error(
+          errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        })
       });
+    setLoader(false);
 
-
-    // if (response.success) {
-    //   // localStorage.setItem("token", result.data.token);
-    //   // let student = await fetch("http://localhost:3000/api/v1/users/current-user", {
-    //   //   method: "POST",
-    //   //   headers: {
-    //   //     "Content-Type": "application/json",
-    //   //   },
-    //   //   body: JSON.stringify({
-    //   //     isAdmin: result.data.user.isAdmin,
-    //   //     token: result.data.token})
-    //   // });
-
-    //   // let studentResult = await student.json();
-    //   // if (studentResult.success) {
-    //   //   localStorage.setItem("student", JSON.stringify(studentResult.student));
-    //   //   navigate("/student-dashboard");
-    //   // } else {
-    //   //   // console.log(studentResult.errors)
-    //   // }setLoader(false);
-    //   setLoader(false);
-    //   console.log(response.status)
-    //   response.status === 200 && navigate("/student-dashboard");
-    // } else {
-    //   // alert(result.errors[0].msg);
-    //   setLoader(false);
-    //   // toast.error(
-    //   //   result.errors[0].msg, {
-    //   //   position: "top-right",
-    //   //   autoClose: 3000,
-    //   //   hideProgressBar: false,
-    //   //   closeOnClick: true,
-    //   //   pauseOnHover: true,
-    //   //   draggable: true,
-    //   //   progress: undefined,
-    //   //   theme: "dark",
-    //   // })
-    // }
-    
   };
 
   const [email, setEmail] = useState("");

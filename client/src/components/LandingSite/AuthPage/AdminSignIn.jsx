@@ -4,27 +4,10 @@ import { useState } from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader } from "../../Dashboards/Common/Loader";
+import axios from "axios";
 
 export default function AdminSignIn() {
   let navigate = useNavigate();
-  
-  const getHostel = async () => {
-    let admin = JSON.parse(localStorage.getItem("admin"));
-    try {
-      const res = await fetch("http://localhost:3000/api/admin/get-hostel", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ id: admin._id })
-      });
-
-      const data = await res.json();
-      localStorage.setItem("hostel", JSON.stringify(data.hostel));
-    } catch (err) {
-      // console.log(err);
-    }
-  };
 
   let login = async (event) => {
     event.preventDefault();
@@ -33,40 +16,24 @@ export default function AdminSignIn() {
       email: inputEmail,
       password: pass,
     };
+    axios.post("http://localhost:8000/api/v1/organisation/login", data, { headers: { 'Content-Type': 'application/json' } })
+      .then((response) => {
+        console.log("response", response);
+        // setUser(response.data.data.user);
+        localStorage.setItem("token", response.data.data.accessToken);
+        localStorage.setItem("admin", JSON.stringify(response.data.data.organisation));
+        console.log("response.data.data.user", response.data.data.user);
+        console.log("response.data.data.token", response.data.data.token);
 
-    let response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data)
-    });
-
-    let result = await response.json();
-
-
-    if (result.success) {
-      localStorage.setItem("token", result.data.token);
-      let admin = await fetch("http://localhost:3000/api/v1/organisation/login", {
-        method: "POST",
-        
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          isAdmin: result.data.user.isAdmin,
-          token: result.data.token
-        })
-      });
-
-      let adminResult = await admin.json();
-      if (adminResult.success) {
-        localStorage.setItem("admin", JSON.stringify(adminResult.admin));
-        await getHostel();
         navigate("/admin-dashboard");
-      } else {
+      })
+      .catch((error) => {
+        console.log("error", error);
+        const statusCode = error.response.status;
+        let errorMessage = error.response.data.message;
+
         toast.error(
-          adminResult.errors[0].msg, {
+          errorMessage, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -76,20 +43,7 @@ export default function AdminSignIn() {
           progress: undefined,
           theme: "dark",
         })
-      }
-    } else {
-      toast.error(
-        result.errors[0].msg, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      })
-    }
+      });
     setLoader(false);
   };
 

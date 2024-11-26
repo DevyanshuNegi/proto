@@ -5,13 +5,14 @@ import { verifysession } from "../../../utils";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Loader } from "../../Dashboards/Common/Loader";
+import axios from "axios";
 
 export default function OrgSignup() {
     let navigate = useNavigate();
 
-    if (localStorage.getItem("token")) {
-        verifysession();
-    }
+    // if (localStorage.getItem("token")) {
+    //     verifysession();
+    // }
 
     let login = async (event) => {
         event.preventDefault();
@@ -19,55 +20,44 @@ export default function OrgSignup() {
         let data = {
             email: email,
             password: pass,
+            name: name,
+            started_at: started_at,
+            description: description,
+            phone:phone,
         };
 
-        let response = await fetch("http://localhost:3000/api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        });
-
-        let result = await response.json();
-
-        if (result.success) {
-            localStorage.setItem("token", result.data.token);
-            let student = await fetch("http://localhost:3000/api/student/get-student", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    isAdmin: result.data.user.isAdmin,
-                    token: result.data.token
-                })
-            });
-
-            let studentResult = await student.json();
-            if (studentResult.success) {
-                localStorage.setItem("student", JSON.stringify(studentResult.student));
-                navigate("/student-dashboard");
-            } else {
-                // console.log(studentResult.errors)
-            }
-        } else {
-            // alert(result.errors[0].msg);
-            toast.error(
-                result.errors[0].msg, {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
+        console.log(data);
+        await axios.get("http://localhost:8000/api/v1/organisation", data, { headers: { 'Content-Type': 'application/json' } })
+            .then((response) => {
+                console.log(response);
+            }).catch((error) => {
+                console.log("this is chatched error");
+                console.error(error);
             })
-        }
-        setLoader(false);
-    };
 
+        axios.post("http://localhost:8000/api/v1/organisation/register", data, { headers: { 'Content-Type': 'application/json' } })
+            .then((response) => {
+                console.log("response", response);
+                localStorage.setItem("token", response.data.data.token);
+                localStorage.setItem("admin", JSON.stringify(response.data.data.user));
+                navigate("/admin-dashboard");
+            }).catch((error) => {
+                console.log("error", error);
+                const statusCode = error.response.status;
+                let errorMessage = error.response.data.message;
+                toast.error(
+                    errorMessage, {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                })
+            })
+    };
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const [loader, setLoader] = useState(false)
@@ -75,7 +65,7 @@ export default function OrgSignup() {
     const [description, setDescription] = useState("");
     const [started_at, setStarted_at] = useState("");
     const [name, setName] = useState("");
-    
+    const [phone, setPhone] = useState("");
 
 
     const changeEmail = (event) => {
@@ -87,12 +77,6 @@ export default function OrgSignup() {
     const changeName = (event) => {
         setName(event.target.value);
     };
-    const changeOccupation = (event) => {
-        setOccupation(event.target.value);
-    };
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-    }
 
     const iemail = {
         name: "email",
@@ -123,19 +107,26 @@ export default function OrgSignup() {
         onChange: (event) => setPhone(event.target.value),
     };
     const iage = {
-        name: "age",
-        type: "number",
-        placeholder: "20",
+        name: "Started at",
+        type: "date",
+        placeholder: "",
         req: true,
-        onChange: (event) => setAge(event.target.value),
+        onChange: (event) => setStarted_at(event.target.value),
     };
-    const ioccupation = {
-        name: "occupation",
+    const idescription = {
+        name: "description",
         type: "text",
-        placeholder: "Student",
-        req: false,
-        onChange: changeOccupation,
+        placeholder: "Description",
+        req: true,
+        onChange: (event) => setDescription(event.target.value),
     };
+    // const ioccupation = {
+    //     name: "occupation",
+    //     type: "text",
+    //     placeholder: "Student",
+    //     req: false,
+    //     onChange: changeOccupation,
+    // };
 
 
     return (
@@ -150,8 +141,9 @@ export default function OrgSignup() {
                     <Input field={iname} />
                     <Input field={iphone} />
                     <Input field={iage} />
-                    <Input field={ioccupation} />
-                    <div>
+                    <Input field={idescription} />
+                    {/* <Input field={ioccupation} /> */}
+                    {/* <div>
                         <label htmlFor="gender" className="block mb-2 text-sm font-medium text-white">Gender</label>
                         <select
                             name="gender"
@@ -166,7 +158,7 @@ export default function OrgSignup() {
                             <option value="female">Female</option>
                             <option value="other">Other</option>
                         </select>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-start">

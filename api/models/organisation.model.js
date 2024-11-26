@@ -69,7 +69,11 @@ organisationSchema.pre("save", async function (next) {
 })
 
 organisationSchema.methods.isPasswordCorrect = async function (password) {
-    return await bcrypt.compare(password, this.password)
+    console.log("pass ", password);
+    console.log("this pass", this.password);
+    return password===this.password;
+    // return await bcrypt.compare(password, this.password)
+    // return await bcrypt.compare(password, this.password);
 }
 
 organisationSchema.methods.generateAccessToken = function () {

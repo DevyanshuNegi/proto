@@ -5,13 +5,19 @@ import {
     logoutOrganisation,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentOrganisation
+    getCurrentOrganisation,
+    addEvent,
+    
    
 } from "../controllers/organisation.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router()
 
+router.route("/").get((req, res) => {
+    console.log("Hello World");
+    res.send("Hello World")
+})
 router.route("/register").post(registerOrganisation)
 
 // router.route("/register").post(registerUser)
@@ -20,6 +26,8 @@ router.route("/login").post(loginOrganisation)
 
 //secured routes
 router.route("/logout").post(verifyJWT,  logoutOrganisation)
+router.route("/add-event").post(verifyJWT, addEvent)
+
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 // router.route("/current-user").get(verifyJWT, getCurrentOrganisation)

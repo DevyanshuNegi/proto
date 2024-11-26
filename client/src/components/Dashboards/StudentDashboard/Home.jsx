@@ -6,16 +6,16 @@ import { useContext } from "react";
 const List = () => {
   const [invoiceList, setInvoiceList] = useState([
     {
-      title: "Mess bill",
+      title: "Startup Pitch Fest",
       date: "20-5-2023",
-      amount: "Rs. 690",
-      status: "pending",
+      // amount: "Rs. 690",
+      status: "participant",
     },
     {
-      title: "Mess bill",
-      date: "20-5-2023",
-      amount: "Rs. 690",
-      status: "pending",
+      title: "Tech Conference 2024",
+      date: "12-5-2023",
+      // amount: "Rs. 690",
+      status: "participant",
     },
   ]);
   // useEffect(() => {
@@ -53,7 +53,7 @@ const List = () => {
   //     });
   // }, [invoiceList.length]);
 //   let student = {
-//     "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "muhammaddanish14@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
+//     "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "devyanshunegi@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
 // }
 const {user} = useContext(UserContext);
 
@@ -63,7 +63,7 @@ const {user} = useContext(UserContext);
     <div className="w-full max-w-md p-4 rounded-lg shadow sm:p-8 bg-neutral-950 drop-shadow-xl overflow-y-auto max-h-70">
       <div className="flex items-center justify-between mb-4">
         <h5 className="text-xl font-bold leading-none text-white">
-          Unpaid Invoices
+          Past Events
         </h5>
       </div>
       <div className="flow-root">
@@ -127,7 +127,7 @@ const {user} = useContext(UserContext);
 function Home() {
   // let student = JSON.parse(localStorage.getItem("student"));
   // let student = {
-  //   "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "muhammaddanish14@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
+  //   "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "devyanshunegi@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
   // }
   const { user } = useContext(UserContext);
   let student = user;
@@ -173,7 +173,7 @@ function Home() {
         <List />
         <div className="flex flex-col items-center bg-neutral-950 rounded-xl shadow-xl p-5">
           <span className="text-white text-xl">Attendance</span>
-          <Doughnut
+          {/* <Doughnut
             datasetIdKey="id"
             data={{
               labels,
@@ -188,7 +188,7 @@ function Home() {
                 },
               ],
             }}
-          />
+          /> */}
         </div>
       </div>
     </div>
