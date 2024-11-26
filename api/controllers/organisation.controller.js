@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken"
 // import mongoose from "mongoose";
 import {Organisation} from "../models/organisation.model.js"
-
+import {Event} from "../models/event.model.js"
 
 const generateAccessAndRefereshTokens = async(organisationId) =>{
     try {
@@ -262,7 +262,25 @@ const getCurrentOrganisation = asyncHandler(async(req, res) => {
     ))
 })
 
+const addEvent = asyncHandler(async(req, res) => {
+    const {name, date, location, description} = req.body;
 
+    console.log(name, date, location);
+
+    if(!name || !date || !location){
+        // throw new ApiError(400, "All fields are required")
+        return res.status(400).json(new ApiResponse(400, {}, "All fields are required"))
+    }
+
+    const event = await Event.create({
+        name,
+        eventDate: date,
+        eventVenue: location,
+        organizedBy: req.organisation._id
+    })
+
+    return res.status(201).json(new ApiResponse(201, event, "Event added successfully"))
+});
 
 export {
     registerOrganisation,
@@ -270,5 +288,6 @@ export {
     logoutOrganisation,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentOrganisation
+    getCurrentOrganisation,
+    addEvent,
 }

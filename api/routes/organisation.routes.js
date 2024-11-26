@@ -5,7 +5,9 @@ import {
     logoutOrganisation,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentOrganisation
+    getCurrentOrganisation,
+    addEvent,
+    
    
 } from "../controllers/organisation.controller.js";
 
@@ -24,6 +26,8 @@ router.route("/login").post(loginOrganisation)
 
 //secured routes
 router.route("/logout").post(verifyJWT,  logoutOrganisation)
+router.route("/add-event").post(verifyJWT, addEvent)
+
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 // router.route("/current-user").get(verifyJWT, getCurrentOrganisation)
