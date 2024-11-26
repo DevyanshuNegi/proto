@@ -8,7 +8,6 @@ import axios from "axios";
 
 export default function AdminSignIn() {
   let navigate = useNavigate();
-  
 
   let login = async (event) => {
     event.preventDefault();
@@ -21,8 +20,8 @@ export default function AdminSignIn() {
       .then((response) => {
         console.log("response", response);
         // setUser(response.data.data.user);
-        localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("admin", JSON.stringify(response.data.data.user));
+        localStorage.setItem("token", response.data.data.accessToken);
+        localStorage.setItem("admin", JSON.stringify(response.data.data.organisation));
         console.log("response.data.data.user", response.data.data.user);
         console.log("response.data.data.token", response.data.data.token);
 
