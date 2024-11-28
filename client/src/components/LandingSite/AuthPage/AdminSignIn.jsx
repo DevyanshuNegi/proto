@@ -77,9 +77,9 @@ export default function AdminSignIn() {
 
   return (
     <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
-      <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <div className="p-6 space-y-4 md:space-y-6 sm:p-8 align-middle">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
-          Sign in to your account - Manager
+          Organisation Sign-In
         </h1>
         <form className="space-y-4 md:space-y-6" onSubmit={login}>
           <Input field={email} />
@@ -127,7 +127,7 @@ export default function AdminSignIn() {
           <p className="text-sm font-light text-gray-400">
             You&apos;re not registered ?{" "}
             <Link
-              to="/auth/org-signup"
+              to="/auth/ngo-signup"
               className="font-medium hover:underline text-blue-500"
             >
               Register Here.

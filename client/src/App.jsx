@@ -39,11 +39,11 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="auth" element={<Auth />}>
             <Route index element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="login" element={<SignIn />} />
-            <Route path="request" element={<SignUp />} />
-            <Route path="org-signup" element={<OrgSignup />} />
-            <Route path="admin-login" element={<AdminSignIn />} />
+            <Route path="user-signup" element={<SignUp />} />
+            <Route path="user-login" element={<SignIn />} />
+            {/* <Route path="request" element={<SignUp />} /> */}
+            <Route path="ngo-signup" element={<OrgSignup />} />
+            <Route path="ngo-login" element={<AdminSignIn />} />
           </Route>
         </Route>
         <Route path="/student-dashboard" element={<Index />}>

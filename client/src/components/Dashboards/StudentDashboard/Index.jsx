@@ -1,19 +1,51 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../Common/Sidebar";
 import { Topbar } from "../Common/Topbar";
-import { useContext } from "react";
-import { UserContext } from "../../contexts/UserContext";
+// import { useContext } from "react";
+// import { UserContext } from "../../contexts/UserContext";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
-  const {user} = useContext(UserContext);
-  console.log(user);
-
-  const dashboard = "student";
+  const [responsedata,setResponsedata] = useState({});
+  const navigate = useNavigate();  
+  useEffect(() => {
+  
+    return () => {
+      const axiosInstance = axios.create({
+        baseURL: "http://localhost:8000/api/v1/",
+        withCredentials: true,
+      });
+      let name;
+      axiosInstance
+        .get("http://localhost:8000/api/v1/users/current-user", {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }).then((response) => {
+        console.log("Logged In ^_^")
+        console.log(response)
+        console.log(response.data.data.name)
+        const newItem= response.data.data;
+        setResponsedata(newItem);
+        console.log("Hii")
+        console.log(responsedata)
+        // responsedata=response.data.data.user;
+      }).catch((error) => {
+        console.log("Error in not getting cookiee");
+        console.log(error);
+        navigate("/auth/user-login");
+      });
+    }
+  }, [])
+  // const {user} = useContext(UserContext);
+  // console.log(user);
+  // const dashboard = "student";
   const links = [
     {
       text: "Home",
       url: "/student-dashboard",
-      for: dashboard,
+      // for: dashboard,
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -135,15 +167,17 @@ export default function Index() {
   ];
 
   // const student = JSON.parse(localStorage.getItem("student"));
-  const student = {
-    name: "John Doe",
-  };
+  // const student = {
+  //   name: "John Doe",
+  // };
+  
+ 
   
 
   return (
     <div className="flex">
       <Sidebar links={links} />
-      <Topbar name={user.name} notifications={[]} />
+      <Topbar data={responsedata} />
       <div className="w-full bg-stone-900 h-screen">
         <Outlet />
       </div>

@@ -10,24 +10,24 @@ function HeroSection() {
       </div>
       <div className="md:pt-[8%]">
         <h1 className="font-bold text-6xl">
-          Sewa <span className="text-blue-500">Hub</span>
+          Seva <span className="text-blue-500">Hub</span>
         </h1>
         <p className="py-10 text-2xl">
-          A centeral platform for NGO's and volunteers to connect and work together
+          A centeral platform for NGO's and volunteer's to connect and work together
         </p>
-        <div className="py-20">
+        <div className="py-20 ">
           <Link
-            to="/auth/login"
-            className="bg-blue-500 py-3 px-40 hover:bg-blue-700 transition rounded text-2xl"
+            to="/auth/user-login"
+            className="bg-blue-500 font-semibold py-3 px-40 hover:bg-blue-700 transition rounded text-2xl w-fit"
           >
             Login
           </Link>
-          <p className="mt-6 mb-3">OR</p>
+          <p className="mt-6 mb-5">OR</p>
           <Link
-            to="/auth/request"
-            className="text-xl hover:underline hover:text-blue-500"
+            to="/auth/ngo-login"
+            className="bg-gray-500 text-black font-bold py-3 px-40 hover:bg-gray-700 transition rounded text-2xl w-fit "
           >
-            Request Registration
+            NGO Login
           </Link>
         </div>
       </div>

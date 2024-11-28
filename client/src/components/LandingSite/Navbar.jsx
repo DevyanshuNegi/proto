@@ -42,26 +42,26 @@ function Navbar() {
         >
           Contact
         </Link>
-        <Link
+        {/* <Link
           to="/auth/request"
           className="md:py-3 md:hover:text-blue-500 transition-all ease-linear"
         >
           Request
-        </Link>
+        </Link> */}
         <Link
-          to="/auth/admin-login"
+          to="/auth/ngo-login"
           className="md:py-3 md:hover:text-blue-500 transition-all ease-linear"
         >
-          Org.Login
+          NGO Login
         </Link>
-        <Link
+        {/* <Link
           to="/auth/signup"
           className="md:py-3 md:hover:text-blue-500 transition-all ease-linear"
         >
           Register
-        </Link>
+        </Link> */}
         <Link
-          to="/auth/login"
+          to="/auth/user-login"
           className={`md:bg-blue-500 md:hover:bg-blue-700 transition md:text-white font-bold md:text-lg md:py-3 md:mb-3 md:px-8 md:rounded ${
             menuOpen ? "text-blue-500" : ""
           }`}

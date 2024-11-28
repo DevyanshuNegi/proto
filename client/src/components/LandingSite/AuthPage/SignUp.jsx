@@ -1,19 +1,17 @@
 import { Input } from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { verifysession } from "../../../utils";
+// import { verifysession } from "../../../utils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
-import { UserContext } from "../../contexts/UserContext";
-import { useContext } from "react";
-import useUser from "../../contexts/useUser";
+// import { UserContext } from "../../contexts/UserContext";
+// import { useContext } from "react";
+// import useUser from "../../contexts/useUser";
 // import qs from "qs";
-export default function SignUp
-() {
-
-  const { user, setUser } = useUser();
+export default function SignUp() {
+  // const { user, setUser } = useUser();
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -31,7 +29,6 @@ export default function SignUp
   // }
 
   async function login(event) {
-
     event.preventDefault();
     setLoader(true);
     const data = {
@@ -40,21 +37,22 @@ export default function SignUp
       name,
       phone_No: phone,
       age,
-      gender: "male",
-      occupation: "Doctor"
+      gender,
+      occupation: occupation,
     };
 
-    console.log(data);
-    axios.post("http://localhost:8000/api/v1/users/register",data , { headers: { 'Content-Type': 'application/json' }})
+    // console.log("Data-",data);
+    axios
+      .post("http://localhost:8000/api/v1/users/register", data, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then((response) => {
-        console.log(response);
-        console.log("response da data da data",response.data.data);
+        console.log("Response-",response);
+        console.log("response da data -", response.data);
+        console.log("response da data da data-", response.data.data);
         setLoader(false);
-        localStorage.setItem("token", response.data.data);
-        
-        setUser(response.data.data);
-        navigate("/student-dashboard");
-      })  
+        navigate("/auth/user-login");
+      })
       .catch((error) => {
         console.log("this is chatched error");
         console.error(error);
@@ -91,8 +89,6 @@ export default function SignUp
 
     // let result = await response.json();
 
-
-
     //   // let studentResult = await student.json();
     //   // if (studentResult.success) {
     //   //   localStorage.setItem("student", JSON.stringify(studentResult.student));
@@ -117,7 +113,7 @@ export default function SignUp
     //     theme: "dark",
     //   })
     // }
-  };
+  }
 
   const changeEmail = (event) => {
     setEmail(event.target.value);
@@ -133,7 +129,7 @@ export default function SignUp
   };
   const handleGenderChange = (event) => {
     setGender(event.target.value);
-  }
+  };
 
   const iemail = {
     name: "email",
@@ -152,7 +148,7 @@ export default function SignUp
   const iname = {
     name: "name",
     type: "text",
-    placeholder: "Devyanshu Negi",
+    placeholder: "John Doe",
     req: true,
     onChange: changeName,
   };
@@ -166,7 +162,7 @@ export default function SignUp
   const iage = {
     name: "age",
     type: "number",
-    placeholder: "20",
+    placeholder: "Age",
     req: true,
     onChange: (event) => setAge(event.target.value),
   };
@@ -177,10 +173,9 @@ export default function SignUp
     req: false,
     onChange: changeOccupation,
   };
-  
 
   return (
-    <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700 absolute top-[15vh]">
+    <div className="border border-gray-300 p-4 shadow-spread-white w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 absolute top-[15vh] mb-3">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
           Register your account
@@ -193,7 +188,12 @@ export default function SignUp
           <Input field={iage} />
           <Input field={ioccupation} />
           <div>
-            <label htmlFor="gender" className="block mb-2 text-sm font-medium text-white">Gender</label>
+            <label
+              htmlFor="gender"
+              className="block mb-2 text-sm font-medium text-white"
+            >
+              Gender
+            </label>
             <select
               name="gender"
               id="gender"
@@ -254,7 +254,7 @@ export default function SignUp
           <p className="text-sm font-light text-gray-400">
             Already have an account{" "}
             <Link
-              to="/auth/login"
+              to="/auth/user-login"
               className="font-medium hover:underline text-blue-500"
             >
               Login

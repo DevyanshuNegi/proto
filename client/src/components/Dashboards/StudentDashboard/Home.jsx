@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Doughnut } from "react-chartjs-2";
-import { UserContext } from "../../contexts/UserContext";
-import { useContext } from "react";
-
+// import { Doughnut } from "react-chartjs-2";
+// import { UserContext } from "../../contexts/UserContext";
+// import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const List = () => {
   const [invoiceList, setInvoiceList] = useState([
     {
@@ -18,45 +19,6 @@ const List = () => {
       status: "participant",
     },
   ]);
-  // useEffect(() => {
-  //   let student = JSON.parse(localStorage.getItem("student"));
-  //   fetch("http://localhost:3000/api/invoice/student", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ student: student._id }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         let invoices = data.invoices;
-  //         let list = [];
-  //         invoices.forEach((invoice) => {
-  //           if (invoice.status.toLowerCase() === "pending") {
-  //             let date = new Date(invoice.date);
-  //             invoice.date = date.toLocaleDateString("en-US", {
-  //               day: "numeric",
-  //               month: "long",
-  //               year: "numeric",
-  //             });
-  //             list.push({
-  //               title: invoice.title,
-  //               amount: "Rs. " + invoice.amount,
-  //               status: invoice.status,
-  //               date: invoice.date,
-  //             });
-  //           }
-  //         });
-  //         setInvoiceList(list);
-  //       }
-  //     });
-  // }, [invoiceList.length]);
-//   let student = {
-//     "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "devyanshunegi@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
-// }
-const {user} = useContext(UserContext);
-
 
 
   return (
@@ -125,49 +87,39 @@ const {user} = useContext(UserContext);
 };
 
 function Home() {
-  // let student = JSON.parse(localStorage.getItem("student"));
-  // let student = {
-  //   "id": { "$oid": "673ec9c670f916470ba666b4" }, "name": "devyanshu negi", "email": "devyanshunegi@gmail.com", "phone_No": { "$numberInt": "1902385021" }, "age": { "$numberInt": "64" }, "gender": "male", "occupation": "Doctor", "past_Volunteered": [], "past_Participated": [], "password": "$2b$10$JZyvMcUkyJjavvDFMgMUBudxV0TuUcqnb7bVy.glAto.8UpPbGz4u", "createdAt": { "$date": { "$numberLong": "1732168134370" } }, "updatedAt": { "$date": { "$numberLong": "1732168134370" } }, "_v": { "$numberInt": "0" }
-  // }
-  const { user } = useContext(UserContext);
-  let student = user;
-  console.log(student);
-  const getAttendance = async () => {
-    let student = JSON.parse(localStorage.getItem("student"));
-    const res = await fetch("http://localhost:3000/api/attendance/get", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ student: student._id }),
-    });
-    const data = await res.json();
-    if (data.success) {
-      let daysOff = 0;
-      data.attendance.map((day) => {
-        if (day.status === "absent") {
-          daysOff++;
-        }
-      });
-      setDaysOff(daysOff);
-    } else {
-      // console.log("Error");
-    }
-  };
-
+  let [responsedata, setResponsedata] = useState({});
+  const navigate = useNavigate();  
   useEffect(() => {
-    getAttendance();
-  }, []);
+  
+    return () => {
+      const axiosInstance = axios.create({
+        baseURL: "http://localhost:8000/api/v1/",
+        withCredentials: true,
+      });
+      let name;
+      axiosInstance.get("http://localhost:8000/api/v1/users/current-user", {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }).then((response) => {
+        console.log("Logged In ^_^")
+        console.log(response)
+        console.log(response.data)
+        const newItem= response.data.data;
+        setResponsedata(newItem);
+      }).catch((error) => {
+        console.log("Error in not getting cookie");
+        console.log(error);
+        navigate("/auth/user-login");
+      });
+    }
+  }, [])
+  
 
-  const labels = ["Days off", "Days present"];
-  let totalDays = new Date();
-  totalDays = totalDays.getDate();
-  const [daysOff, setDaysOff] = useState(0); //!Fetch from database
 
   return (
     <div className="w-full h-screen flex items-center justify-center flex-col gap-5 max-h-screen overflow-y-auto pt-64 lg:pt-0 md:pt-64 sm:pt-96">
       <h1 className="text-white font-bold text-5xl text-center">
-        Welcome <span className="text-blue-500">{student.name}!</span>
+        Welcome <span className="text-blue-500">{responsedata.name}!</span>
       </h1>
       <div className="flex gap-5 w-full justify-center flex-wrap">
         <List />
