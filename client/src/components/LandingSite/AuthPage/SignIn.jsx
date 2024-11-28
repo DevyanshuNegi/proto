@@ -1,16 +1,16 @@
 import { Input } from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { verifysession } from "../../../utils/";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { verifysession } from "../../../utils/";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
-import { UserContext } from "../../contexts/UserContext";
-import { useContext } from "react";
+// import { UserContext } from "../../contexts/UserContext";
+// import { useContext } from "react";
 
 export default function SignIn() {
-  const { user, setUser } = useContext(UserContext);
+  // const { user, setUser } = useContext(UserContext);
   let navigate = useNavigate();
 
   // if (localStorage.getItem("token")) {
@@ -25,24 +25,37 @@ export default function SignIn() {
       password: pass,
     };
 
-    axios.post("http://localhost:8000/api/v1/users/login", data, { headers: { 'Content-Type': 'application/json' } })
+    const axiosInstance = axios.create({
+      baseURL: "http://localhost:8000/api/v1/",
+      withCredentials: true,
+    });
+    axiosInstance
+      .post("users/login", data, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      })
       .then((response) => {
-        setUser(response.data.data.user);
-        localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("student", JSON.stringify(response.data.data.user));
-        console.log("response.data.data.user", response.data.data.user);
-        console.log("response.data.data.token", response.data.data.token);
-
+        // setUser(response.data.data.user);
+        // localStorage.setItem("token", response.data.data.token);
+        // localStorage.setItem("student", JSON.stringify(response.data.data.user));
+        // console.log("response.data.data.user", response.data.data.user);
+        // console.log("response.data.data.token", response.data.data.token);
+        console.log("Respone -", response);
 
         navigate("/student-dashboard");
       })
       .catch((error) => {
-
         const statusCode = error.response.status;
         let errorMessage = error.response.data.message;
 
-        toast.error(
-          errorMessage, {
+        if (statusCode == 401) {
+          // Empty field
+          setError("Invalid credentials");
+        } else if (statusCode == 404) {
+          // User already exist
+          setError("User Does not Exist");
+        }
+        toast.error(errorMessage, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -51,15 +64,14 @@ export default function SignIn() {
           draggable: true,
           progress: undefined,
           theme: "dark",
-        })
+        });
       });
     setLoader(false);
-
   };
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  const [loader, setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const changeEmail = (event) => {
     setEmail(event.target.value);
@@ -84,7 +96,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
+    <div className="border border-gray-300 p-4 shadow-spread-white w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 ">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
           Sign in to your account
@@ -135,9 +147,9 @@ export default function SignIn() {
             theme="dark"
           />
           <p className="text-sm font-light text-gray-400">
-            Don’t have an account yet?{" "}
+            Don't have an account yet?{" "}
             <Link
-              to="/auth/signup"
+              to="/auth/user-signup"
               className="font-medium hover:underline text-blue-500"
             >
               Register

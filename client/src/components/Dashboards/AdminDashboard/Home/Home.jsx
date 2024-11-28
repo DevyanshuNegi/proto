@@ -81,12 +81,12 @@ function Home() {
 
   const getRequests = async () => {
     const hostel = JSON.parse(localStorage.getItem("hostel"));
-    const res = await fetch("http://localhost:3000/api/messoff/list", {
+    const res = await fetch("http://localhost:800/api/v1/organisation/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ hostel: hostel._id }),
+      // body: JSON.stringify({ hostel: hostel._id }),
     });
     const data = await res.json();
     if (data.success) {

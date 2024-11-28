@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 Sidebar.propTypes = {
   links: PropTypes.shape({
@@ -16,6 +17,21 @@ function Sidebar({ links }) {
   let logout = () => {
     // localStorage.removeItem("student");
     // localStorage.removeItem("token");
+    const axiosInstance = axios.create({
+      baseURL: "http://localhost:8000/api/v1/",
+      withCredentials: true,
+    });
+    axiosInstance.post("http://localhost:8000/api/v1/users/logout", {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }).then((response) => {
+      console.log(response)
+    }).catch((error) => {
+      console.log("Error logging out", error);
+      const statusCode = error.response.status;
+      let errorMessage = error.response.data.message;
+      console.log(statusCode, errorMessage);
+    });
     navigate("/");
   };
   const [isOpen, setIsOpen] = useState(true);
@@ -75,7 +91,7 @@ function Sidebar({ links }) {
         }`}
       >
         <Link
-          to={`/${links[0].for}-dashboard`}
+          to={"/student-dashboard"}
           className="py-4 px-4 md:py-5 lg:py-4 gap-2 bg-blue-700 flex items-center text-2xl"
         >
           <svg

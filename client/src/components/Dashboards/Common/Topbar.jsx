@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
-Topbar.propTypes = {
-  name: PropTypes.string,
-  notifications: PropTypes.array,
-};
+// Topbar.propTypes = {
+//   name: PropTypes.string,
+//   notifications: PropTypes.array,
+// };
 
-function Topbar({ name, notifications }) {
+function Topbar({ data }) {
   const navigate = useNavigate();
   let logout = () => {
-    localStorage.removeItem("admin");
-    localStorage.removeItem("hostel");
-    localStorage.removeItem("student");
-    localStorage.removeItem("token");
+    axios.post("http://localhost:8000/api/v1/users/logout").then((response) => {
+
+    }).catch((error) => {
+      console.log("Error logging out", error);
+      const statusCode = error.response.status;
+      let errorMessage = error.response.data.message;
+      console.log(statusCode, errorMessage);
+    });
     navigate("/");
   };
 
@@ -27,14 +31,16 @@ function Topbar({ name, notifications }) {
     return function cleanup() {
       clearInterval(timerId);
     };
+
   }, []);
 
+  let name="Hi";
   return (
     <div className="py-5 px-5 flex items-center justify-between text-white w-full bg-stone-950 shadow-lg absolute top-0 md:w-[calc(100%-256px)] md:ml-[256px]">
       <span className="hidden md:block">
         {date.toLocaleTimeString()}
       </span>    
-      <span>{name}</span>
+      <span>{data.name}</span>
       <div className="flex gap-3">
         <Link to="settings">
           <svg
@@ -57,7 +63,7 @@ function Topbar({ name, notifications }) {
             />
           </svg>
         </Link>
-        <div className="relative group cursor-pointer">
+        {/* <div className="relative group cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -103,7 +109,7 @@ function Topbar({ name, notifications }) {
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
 
         <div className="relative group cursor-pointer">
           <svg
@@ -124,9 +130,9 @@ function Topbar({ name, notifications }) {
             <Link to="settings" className="py-2 px-8 hover:bg-neutral-900">
               Settings
             </Link>
-            <Link to="/" className="py-2 px-8 hover:bg-neutral-900">
+            <div className="py-2 px-8 hover:bg-neutral-900">
               <span onClick={logout}>Logout</span>
-            </Link>
+            </div>
           </div>
         </div>
       </div>

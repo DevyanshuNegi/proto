@@ -11,7 +11,7 @@ import {
    
 } from "../controllers/organisation.controller.js";
 
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { orgverifyJWT } from "../middlewares/orgAuth.middleware.js";
 const router = Router()
 
 router.route("/").get((req, res) => {
@@ -25,12 +25,12 @@ router.route("/register").post(registerOrganisation)
 router.route("/login").post(loginOrganisation)
 
 //secured routes
-router.route("/logout").post(verifyJWT,  logoutOrganisation)
-router.route("/add-event").post(verifyJWT, addEvent)
+router.route("/logout").post(orgverifyJWT,  logoutOrganisation)
+router.route("/add-event").post(orgverifyJWT, addEvent)
 
 router.route("/refresh-token").post(refreshAccessToken)
-router.route("/change-password").post(verifyJWT, changeCurrentPassword)
-// router.route("/current-user").get(verifyJWT, getCurrentOrganisation)
+router.route("/change-password").post(orgverifyJWT, changeCurrentPassword)
+// router.route("/current-user").get(orgverifyJWT, getCurrentOrganisation)
 
 
 export default router

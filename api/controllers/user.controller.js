@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (
     [email, password, name, phone_No, age, gender, occupation].some(
-      (field) => field?.trim() === ""
+      (field) => field === ""
     )
   ) {
     throw new ApiError(400, "All fields are required");
@@ -107,11 +107,11 @@ const loginUser = asyncHandler(async (req, res) => {
   //access and referesh token
   //send cookie
 
-  const { email, username, password } = req.body;
+  const { email, password } = req.body;
 //   console.log(email);
 
-  if (!username && !email) {
-    throw new ApiError(400, "username or email is required");
+  if (!email) {
+    throw new ApiError(400, "email is required");
   }
 
   // Here is an alternative of above code based on logic discussed in video:
@@ -121,8 +121,9 @@ const loginUser = asyncHandler(async (req, res) => {
   // }
 
   const user = await User.findOne({
-    $or: [{ username }, { email }],
+    email
   });
+  console.log(user)
 
   if (!user) {
     // throw new ApiError(404, "User does not exist");
@@ -145,8 +146,10 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   const options = {
+    // domain: '.localhost:5173',
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "Lax",
   };
 
   return res
@@ -181,7 +184,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    secure: false,
+    sameSite: "Lax",
   };
 
   return res
