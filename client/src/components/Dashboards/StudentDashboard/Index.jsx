@@ -8,37 +8,38 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Index() {
-  const [responsedata,setResponsedata] = useState({});
-  const navigate = useNavigate();  
+  const [responsedata, setResponsedata] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
-  
     return () => {
       const axiosInstance = axios.create({
         baseURL: "http://localhost:8000/api/v1/",
         withCredentials: true,
       });
-      let name;
+      // let name;
       axiosInstance
         .get("http://localhost:8000/api/v1/users/current-user", {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
-        }).then((response) => {
-        console.log("Logged In ^_^")
-        console.log(response)
-        console.log(response.data.data.name)
-        const newItem= response.data.data;
-        setResponsedata(newItem);
-        console.log("Hii")
-        console.log(responsedata)
-        // responsedata=response.data.data.user;
-      }).catch((error) => {
-        console.log("Error in not getting cookiee");
-        console.log(error);
-        navigate("/auth/user-login");
-      });
-    }
-  }, [])
-  // const {user} = useContext(UserContext);
+        })
+        .then((response) => {
+          console.log("Logged In ^_^");
+          console.log(response);
+          console.log(response.data.data.name);
+          const newItem = response.data.data;
+          setResponsedata(newItem);
+          console.log("Hii");
+          console.log(responsedata);
+          // responsedata=response.data.data.user;
+        })
+        .catch((error) => {
+          console.log("Error in not getting cookiee");
+          console.log(error);
+          navigate("/auth/user-login");
+        });
+    };
+  }, []);
+  // const {user} = useConteupcoming evetsxt(UserContext);
   // console.log(user);
   // const dashboard = "student";
   const links = [
@@ -63,25 +64,25 @@ export default function Index() {
         </svg>
       ),
     },
-    {
-      text: "Upcoming Evets",
-      url: "/student-dashboard/mess",
-      svg: (
-        <svg
-          className="h-7 w-7"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {" "}
-          <path stroke="none" d="M0 0h24v24H0z" />{" "}
-          <path d="M3 19l15 -15l3 3l-6 6l2 2a14 14 0 0 1 -14 4" />
-        </svg>
-      ),
-    },
+    // {
+    //   text: "Upcoming Events",
+    //   url: "/student-dashboard/mess",
+    //   svg: (
+    //     <svg
+    //       className="h-7 w-7"
+    //       viewBox="0 0 24 24"
+    //       strokeWidth={1.5}
+    //       stroke="currentColor"
+    //       fill="none"
+    //       strokeLinecap="round"
+    //       strokeLinejoin="round"
+    //     >
+    //       {" "}
+    //       <path stroke="none" d="M0 0h24v24H0z" />{" "}
+    //       <path d="M3 19l15 -15l3 3l-6 6l2 2a14 14 0 0 1 -14 4" />
+    //     </svg>
+    //   ),
+    // },
     {
       text: "Past Events",
       url: "/student-dashboard/attendance",
@@ -170,9 +171,6 @@ export default function Index() {
   // const student = {
   //   name: "John Doe",
   // };
-  
- 
-  
 
   return (
     <div className="flex">

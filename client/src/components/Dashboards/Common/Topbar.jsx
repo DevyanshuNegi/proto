@@ -10,14 +10,15 @@ import { Link, useNavigate } from "react-router-dom";
 function Topbar({ data }) {
   const navigate = useNavigate();
   let logout = () => {
-    axios.post("http://localhost:8000/api/v1/users/logout").then((response) => {
-
-    }).catch((error) => {
-      console.log("Error logging out", error);
-      const statusCode = error.response.status;
-      let errorMessage = error.response.data.message;
-      console.log(statusCode, errorMessage);
-    });
+    axios
+      .post("http://localhost:8000/api/v1/users/logout")
+      .then((response) => {})
+      .catch((error) => {
+        console.log("Error logging out", error);
+        const statusCode = error.response.status;
+        let errorMessage = error.response.data.message;
+        console.log(statusCode, errorMessage);
+      });
     navigate("/");
   };
 
@@ -31,15 +32,12 @@ function Topbar({ data }) {
     return function cleanup() {
       clearInterval(timerId);
     };
-
   }, []);
 
-  let name="Hi";
+  // let name="Hi";
   return (
     <div className="py-5 px-5 flex items-center justify-between text-white w-full bg-stone-950 shadow-lg absolute top-0 md:w-[calc(100%-256px)] md:ml-[256px]">
-      <span className="hidden md:block">
-        {date.toLocaleTimeString()}
-      </span>    
+      <span className="hidden md:block">{date.toLocaleTimeString()}</span>
       <span>{data.name}</span>
       <div className="flex gap-3">
         <Link to="settings">
