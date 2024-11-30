@@ -46,6 +46,19 @@ const userSchema = new Schema(
         ref: "Event",
       },
     ],
+
+    upcomming_Volunteered: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
+    upcomming_Participated: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Event",
+      },
+    ],
     password: {
       type: String,
       required: [true, "Password is required"],

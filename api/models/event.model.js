@@ -24,14 +24,14 @@ const eventSchema = new Schema(
       required: true,
       trim: true,
     },
-    volunteer: {
+    volunteer: [{
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
-    participants: {
+    }],
+    participants: [{
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
+    }],
     description: {
       type: String,
       required: true,
