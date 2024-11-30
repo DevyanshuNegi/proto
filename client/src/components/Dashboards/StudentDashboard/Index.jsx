@@ -173,10 +173,10 @@ export default function Index() {
   // };
 
   return (
-    <div className="flex">
-      <Sidebar links={links} />
+    <div className="flex w-full h-screen">
+      <Sidebar className="w-2/4" links={links} />
       <Topbar data={responsedata} />
-      <div className="w-full bg-stone-900 h-screen">
+      <div className="ml-auto w-5/6 bg-stone-900 h-screen">
         <Outlet />
       </div>
     </div>

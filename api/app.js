@@ -18,7 +18,7 @@ app.use(cookieParser())
 //routes import
 import userRouter from './routes/user.routes.js'
 import organisationRouter from './routes/organisation.routes.js'
-
+import eventRouter from './routes/event.routes.js'
 // import healthcheckRouter from "./routes/healthcheck.routes.js"
 
 
@@ -26,6 +26,7 @@ import organisationRouter from './routes/organisation.routes.js'
 // app.use("/api/v1/healthcheck", healthcheckRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/organisation", organisationRouter)
+app.use("/api/v1/events", eventRouter)
 
 
 // http://localhost:8000/api/v1/users/register

@@ -16,14 +16,18 @@ export default function AdminSignIn() {
       email: inputEmail,
       password: pass,
     };
-    axios.post("http://localhost:8000/api/v1/organisation/login", data, { headers: { 'Content-Type': 'application/json' } })
+    const axiosInstance = axios.create({
+      baseURL: "http://localhost:8000/api/v1/",
+      withCredentials: true,
+    });
+    axiosInstance.post("http://localhost:8000/api/v1/organisation/login", data, { headers: { 'Content-Type': 'application/json' } })
       .then((response) => {
-        console.log("response", response);
+        // console.log("response", response);
         // setUser(response.data.data.user);
-        localStorage.setItem("token", response.data.data.accessToken);
-        localStorage.setItem("admin", JSON.stringify(response.data.data.organisation));
-        console.log("response.data.data.user", response.data.data.user);
-        console.log("response.data.data.token", response.data.data.token);
+        // localStorage.setItem("token", response.data.data.accessToken);
+        // localStorage.setItem("admin", JSON.stringify(response.data.data.organisation));
+        // console.log("response.data.data.user", response.data.data.user);
+        // console.log("response.data.data.token", response.data.data.token);
 
         navigate("/admin-dashboard");
       })

@@ -61,7 +61,7 @@ function App() {
           <Route path="attendance" element={<AdminAttendance />} />
           <Route path="complaints" element={<AdminComplaints />} />
           <Route path="invoices" element={<AdminInvoices/>} />
-          <Route path="suggestions" element={<AdminSuggestions/>} />
+          <Route path="all-events" element={<AdminSuggestions/>} />
           <Route path="settings" element={<AdminSettings/>} />
           <Route path="all-students" element={<AllStudents/>}/>
           <Route path="mess" element={<AdminMess />} />
