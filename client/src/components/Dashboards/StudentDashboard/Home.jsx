@@ -4,61 +4,72 @@ import axios from "axios";
 
 // List Component for displaying upcoming events
 const UpcomingEvents = () => {
-  const [upcomingEvents, setUpcomingEvents] = useState([
-    {
-      title: "AI Workshop 2024",
-      date: "15-12-2024",
-      status: "upcoming",
-    },
-    {
-      title: "Data Science Bootcamp",
-      date: "10-01-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Web Development Conference",
-      date: "22-02-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Machine Learning Summit",
-      date: "05-03-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Cloud Computing Symposium",
-      date: "12-04-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Blockchain Innovation Forum",
-      date: "25-05-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Cybersecurity Awareness Webinar",
-      date: "30-06-2025",
-      status: "upcoming",
-    },
-    {
-      title: "Tech Innovators Meetup",
-      date: "15-07-2025",
-      status: "upcoming",
-    },
-  ]);
+  // const [upcomingEvents, setUpcomingEvents] = useState([
+  //   {
+  //     title: "AI Workshop 2024",
+  //     date: "15-12-2024",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Data Science Bootcamp",
+  //     date: "10-01-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Web Development Conference",
+  //     date: "22-02-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Machine Learning Summit",
+  //     date: "05-03-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Cloud Computing Symposium",
+  //     date: "12-04-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Blockchain Innovation Forum",
+  //     date: "25-05-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Cybersecurity Awareness Webinar",
+  //     date: "30-06-2025",
+  //     status: "upcoming",
+  //   },
+  //   {
+  //     title: "Tech Innovators Meetup",
+  //     date: "15-07-2025",
+  //     status: "upcoming",
+  //   },
+  // ]);
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([{}]);
+  useEffect(() => {
+    
+    return () => {
+      axios.get("http://localhost:8000/api/v1/events/getUpcomingEvents").then((response) => {
+        setEvents(response.data.data);
+      })
+    }
+  }, [])
+  
   return (
-    <div className="w-full max-w-4xl p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
+    <div className="w-full  p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
       <h5 className="text-3xl font-semibold text-white mb-6">
         Upcoming Events
       </h5>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {upcomingEvents.map((event, index) => (
+        {events.map((event, index) => (
           <div
             key={index}
             className="p-4 rounded-lg bg-gray-700 shadow-md hover:shadow-xl transition-all duration-200"
           >
             <div className="flex flex-col items-start">
-              <div className="text-blue-400">
+              {/* <div className="text-blue-400">
                 {event.status.toLowerCase() === "upcoming" ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -90,10 +101,12 @@ const UpcomingEvents = () => {
                     />
                   </svg>
                 )}
-              </div>
+              </div> */}
               <div className="text-white mt-2">
-                <p className="text-xl font-semibold">{event.title}</p>
-                <p className="text-sm text-gray-400">{event.date}</p>
+                <p className="text-xl text-red-300 font-bold">{event.name}</p>
+                <br />
+                <p className="text-xl font-semibold">{event.description}</p>
+                <p className="text-sm text-gray-400">{event.eventDate}</p>
               </div>
             </div>
           </div>
@@ -129,7 +142,7 @@ function Home() {
   }, [navigate]);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center gap-8 overflow-y-auto pt-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="w-full h-screen flex flex-col  items-center gap-8 overflow-y-auto pt-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <h1 className="text-5xl font-extrabold text-white mb-8">
         Welcome, <span className="text-blue-500">{responsedata.name}</span>!
       </h1>
@@ -203,7 +216,7 @@ function Home() {
       </div>
 
       {/* Upcoming Events */}
-      <div className="w-full max-w-6xl overflow-y-scroll pl-9 mt-8">
+      <div className="w-full   mt-8">
         <UpcomingEvents />
       </div>
     </div>

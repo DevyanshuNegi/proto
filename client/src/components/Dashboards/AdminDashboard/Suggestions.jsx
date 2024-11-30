@@ -1,86 +1,74 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "./Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
+import axios from "axios";
 
-function Suggestions() {
-  const getSuggestions = async () => {
-    const hostel = JSON.parse(localStorage.getItem("hostel"));
-    const response = await fetch("http://localhost:3000/api/suggestion/hostel", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ hostel: hostel._id }),
-    });
-
-    const data = await response.json();
-    if (data.success) {
-      setSuggestions(data.suggestions.filter((suggestion) => suggestion.status === "pending"));
-
-    } else {
-      toast.error("Something failed", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-      });
-    }
-  };
-
-  const updateSuggestion = async (id) => {
-    setLoader(true);
-    const response = await fetch("http://localhost:3000/api/suggestion/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({id,  status: "approved"}),
-    });
-
-    const data = await response.json();
-    console.log(data);
-    if (data.success) {
-      toast.success("Suggestion Approved", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-      });
-      getSuggestions();
-    } else {
-      toast.error("Something failed", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        draggable: true,
-      });
-    }
-    setLoader(false);
-  };
-
-  const [loader, setLoader] = useState(false)
-  const [suggestions, setSuggestions] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [modalData, setModalData] = useState(false);
-
-  const toggleModal = (suggestion = {}) => {
-    setModalData(suggestion);
-    setShowModal((showModal) => !showModal);
-  };
-
+const AllEvents = () => {
+  // const [loading, setLoading] = useState(false);
+  // const [events, setEvents] = useState([{}]);
+  // useEffect(() => {
+  //   return () => {
+  //     axios
+  //       .get("http://localhost:8000/api/v1/events/getUpcomingEvents")
+  //       .then((response) => {
+  //         setEvents(response.data.data);
+  //       });
+  //   };
+  // }, []);
+  const [events, setEvents] = useState([]);
   useEffect(() => {
-    getSuggestions();
+    return () => {
+      const axiosInstance = axios.create({
+        baseURL: "http://localhost:8000/api/v1/",
+        withCredentials: true,
+      });
+      // let name;
+      axiosInstance
+        .get("http://localhost:8000/api/v1/organisation/getAll-events")
+        .then((response) => {
+          setEvents(response.data.data);
+        });
+    };
   }, []);
-
+  return (
+    <div className="w-full  p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map((event, index) => (
+          <div
+            key={index}
+            className="p-4 rounded-lg bg-gray-700 shadow-md hover:shadow-xl transition-all duration-200"
+          >
+            <div className="flex flex-col items-start">
+              <div className="text-white mt-2">
+                <p className="text-xl text-red-300 font-bold">{event.name}</p>
+                <br />
+                <p className="text-xl font-semibold">{event.description}</p>
+                <p className="text-sm text-gray-400">{event.eventDate}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+function Suggestions() {
+  // const [events, setEvents] = useState([]);
+  // useEffect(() => {
+  //   return () => {
+  //     axios
+  //       .get("http://localhost:8000/api/v1/organisation/getAll-events")
+  //       .then((response) => {
+  //         setEvents(response.data.data);
+  //       });
+  //   };
+  // }, []);
   return (
     <div className="w-full h-screen flex flex-col gap-3 items-center justify-center">
-      <h1 className="text-white font-bold text-5xl">Suggestions</h1>
-      <div className="bg-neutral-950 px-10 py-5 rounded-xl shadow-xl sm:w-[50%] sm:min-w-[450px] w-full mt-5 max-h-96 overflow-auto">
+      <h1 className="text-white font-bold text-5xl">All Events</h1>
+      {/* <div className="bg-neutral-950 px-10 py-5 rounded-xl shadow-xl sm:w-[50%] sm:min-w-[450px] w-full mt-5 max-h-96 overflow-auto">
         <span className="text-white font-bold text-xl">All Students</span>
         <ul role="list" className="divide-y divide-gray-700 text-white">
           {suggestions.length === 0
@@ -155,6 +143,9 @@ function Suggestions() {
               </>
             ))}
         </ul>
+      </div> */}
+      <div className="w-full mt-8">
+        <AllEvents />
       </div>
     </div>
   );

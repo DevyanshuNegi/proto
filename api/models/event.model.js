@@ -6,7 +6,6 @@ const eventSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     organizedBy: {
       type: Schema.Types.ObjectId,
@@ -14,6 +13,10 @@ const eventSchema = new Schema(
     },
     eventDate: {
       type: Date,
+      required: true,
+    },
+    eventTime: {
+      type: String,
       required: true,
     },
     eventVenue: {
@@ -28,6 +31,11 @@ const eventSchema = new Schema(
     participants: {
       type: Schema.Types.ObjectId,
       ref: "User",
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
     },
   },
   { timestamps: true }

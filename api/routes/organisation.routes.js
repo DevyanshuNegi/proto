@@ -7,6 +7,7 @@ import {
     changeCurrentPassword,
     getCurrentOrganisation,
     addEvent,
+    getAllEvents,
     
    
 } from "../controllers/organisation.controller.js";
@@ -26,8 +27,9 @@ router.route("/login").post(loginOrganisation)
 
 //secured routes
 router.route("/logout").post(orgverifyJWT,  logoutOrganisation)
+router.route("/current-org").get(orgverifyJWT, getCurrentOrganisation)
 router.route("/add-event").post(orgverifyJWT, addEvent)
-
+router.route("/getAll-events").get(orgverifyJWT, getAllEvents)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(orgverifyJWT, changeCurrentPassword)
 // router.route("/current-user").get(orgverifyJWT, getCurrentOrganisation)
