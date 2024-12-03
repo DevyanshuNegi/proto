@@ -1,265 +1,127 @@
-import { ShortCard } from "./ShortCard";
-import { List } from "./List";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import {
-//   AreaChart,
-//   Area,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-//   Legend,
-// } from "recharts";
-// import { getAllStudents } from "../../../../utils";
 import { toast } from "react-toastify";
 
 function Home() {
-  // const admin = JSON.parse(localStorage.getItem("admin"));
-  // const hostel = JSON.parse(localStorage.getItem("hostel"));
-  // const [noOfStudents, setNoOfStudents] = useState(0);
-  // const [complaints, setComplaints] = useState([]);
-  // const [suggestions, setSuggestions] = useState([]);
-
-  // const getStudentCount = async () => {
-  //   const res = await getAllStudents();
-  //   if (res.success) {
-  //     setNoOfStudents(res.students.length);
-  //   }
-  // };
-
-  // const getComplaints = async () => {
-  //   const hostel = JSON.parse(localStorage.getItem("hostel"))._id;
-  //   const response = await fetch(`http://localhost:3000/api/complaint/hostel`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ hostel }),
-  //   });
-
-  //   const data = await response.json();
-  //   if (data.success) {
-  //     setComplaints(data.complaints);
-  //   } else {
-  //     toast.error("Something failed", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //     });
-  //   }
-  // };
-
-  // const getSuggestions = async () => {
-  //   const hostel = JSON.parse(localStorage.getItem("hostel"));
-  //   const response = await fetch(
-  //     "http://localhost:3000/api/suggestion/hostel",
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ hostel: hostel._id }),
-  //     }
-  //   );
-
-  //   const data = await response.json();
-  //   if (data.success) {
-  //     setSuggestions(
-  //       data.suggestions.filter((suggestion) => suggestion.status === "pending")
-  //     );
-  //   } else {
-  //     toast.error("Something failed", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       draggable: true,
-  //     });
-  //   }
-  // };
-
-  // const getRequests = async () => {
-  //   const hostel = JSON.parse(localStorage.getItem("hostel"));
-  //   const res = await fetch("http://localhost:800/api/v1/organisation/login", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     // body: JSON.stringify({ hostel: hostel._id }),
-  //   });
-  //   const data = await res.json();
-  //   if (data.success) {
-  //     data.list.map((req) => {
-  //       req.id = req._id;
-  //       req.from = new Date(req.leaving_date).toDateString().slice(4, 10);
-  //       req.to = new Date(req.return_date).toDateString().slice(4, 10);
-  //       req._id = req.student._id;
-  //       req.student.name = req.student.name;
-  //       req.student.room_no = req.student.room_no;
-  //       req.status = req.status;
-  //       (req.title = `${req.student.name} [ Room: ${req.student.room_no}]`),
-  //         (req.desc = `${req.from} to ${req.to}`);
-  //     });
-  //     setMessReqs(data.list);
-  //   }
-  // };
-
-  // function transformApiData(apiData) {
-  //   // Extract complaints from the API data
-  //   const complaintss = apiData || [];
-  
-  //   // Create a Map to store complaints grouped by date
-  //   const complaintMap = new Map();
-  
-  //   // Process each complaint
-  //   complaintss.forEach(complaint => {
-  //     // Parse the date string
-  //     const date = new Date(complaint.date);
-      
-  //     const formattedDate = date.toLocaleDateString('en-US', {
-  //       timeZone: 'UTC',
-  //       year: 'numeric',
-  //       month: '2-digit',
-  //       day: '2-digit'
-  //     }).replace(/\.\d{3}/, '');
-
-  //     // Increment the count for this date
-  //     complaintMap.set(formattedDate, (complaintMap.get(formattedDate) || 0) + 1);
-  //   });
-  
-  //   // Convert the Map to an array of objects
-  //   const transformedData = Array.from(complaintMap.entries()).map(([date, count]) => ({
-  //     name: date,
-  //     DailyComplaints: count
-  //   }));
-  
-  //   return transformedData;
-  // }
-
-  // useEffect(() => {
-  //   getRequests();
-  //   getStudentCount();
-  //   getComplaints();
-  //   getSuggestions();
-  // }, []);
-
-  // const [messReqs, setMessReqs] = useState([]);
-
-  const messIcon = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-      />
-    </svg>
-  );
-
-  const suggestionIcon = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
-      className="w-6 h-6"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  );
-
-  // const data = transformApiData(complaints);
-  // const graph = (
-  //   <ResponsiveContainer
-  //     width="100%"
-  //     height="85%"
-  //     className={
-  //       "bg-neutral-950 px-7 py-5 rounded-xl shadow-xl w-full max-w-[350px] max-h-96"
-  //     }
-  //   >
-  //     <AreaChart
-  //       data={data}
-  //       margin={{
-  //         top: 5,
-  //         right: 50,
-  //         bottom: 15,
-  //         left: -25,
-  //       }}
-  //     >
-  //       <defs>
-  //         <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-  //           <stop offset="5%" stopColor="#8884d8" stopOpacity={0.9} />
-  //           <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1} />
-  //         </linearGradient>
-  //       </defs>
-  //       <XAxis dataKey="name" />
-  //       <Legend verticalAlign="top" height={36} />
-  //       <YAxis />
-  //       <Tooltip />
-  //       <Area
-  //         type="monotone"
-  //         dataKey="DailyComplaints"
-  //         stroke="#8884d8"
-  //         fillOpacity={1}
-  //         fill="url(#colorUv)"
-  //       />
-  //     </AreaChart>
-  //   </ResponsiveContainer>
-  // );
-
-  const [responsedata, setResponsedata] = useState({});
+  const [adminData, setAdminData] = useState({
+    name: "Admin",
+    email: "",
+    description: "",
+    rating: 0,
+    started_at: "",
+    docs: [],
+    members: [],
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    const axiosInstance = axios.create({
-      baseURL: "http://localhost:8000/api/v1/",
-      withCredentials: true,
-    });
-
-    axiosInstance
-      .get("http://localhost:8000/api/v1/organisation/current-org", {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      })
-      .then((response) => {
-        setResponsedata(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data", error);
+    const fetchAdminData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/v1/organisation/current-org",
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          },
+        );
+        setAdminData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching admin data", error);
+        toast.error("Failed to fetch admin data. Redirecting to login.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         navigate("/auth/ngo-login");
-      });
+      }
+    };
+
+    fetchAdminData();
   }, [navigate]);
 
   return (
-    <div className="w-full h-screen flex flex-col gap-3 items-center justify-center max-h-screen overflow-x-hidden overflow-y-auto pt-[400px] sm:pt-96 md:pt-96 lg:pt-80 xl:pt-20">
-      <h1 className="text-white font-bold text-5xl text-center">
-        Welcome <span className="text-blue-500">{responsedata.name || "admin"}!</span>
+    <div className="w-full h-screen flex flex-col items-center justify-start pt-20 px-10 sm:px-14 bg-gradient-to-b from-[#0e1c33] to-[#1a2540] text-white">
+      <h1 className="text-5xl md:text-6xl font-extrabold text-center mb-6 text-gradient leading-tight">
+        Welcome, {adminData.name}!
       </h1>
-      {/* <h1 className="text-white text-xl">Manager, {hostel.name || "hostel"}</h1>
-      <div className="flex w-full gap-5 sm:px-20 pt-5 flex-wrap items-center justify-center">
-        <ShortCard title="Total Students" number={noOfStudents} />
-        <ShortCard title="Total Complaints" number={complaints.length} />
-        <ShortCard title="Total Suggestions" number={suggestions.length} />
+      <p className="text-xl md:text-2xl text-center mb-14 max-w-4xl text-gray-300 opacity-80">
+        {adminData.description ||
+          "Effortlessly manage your organization's activities with a premium admin dashboard."}
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full max-w-6xl">
+        {/* Admin Details */}
+        <div className="bg-[#1F1F1F] rounded-2xl shadow-xl p-8 lux-card hover:scale-105 transition-all duration-300">
+          <h2 className="text-3xl font-semibold mb-4 text-gold">
+            Organization Details
+          </h2>
+          <p className="text-lg mb-3">
+            <strong>Name:</strong> {adminData.name}
+          </p>
+          <p className="text-lg mb-3">
+            <strong>Email:</strong> {adminData.email}
+          </p>
+          <p className="text-lg mb-3">
+            <strong>Rating:</strong> {adminData.rating} ⭐
+          </p>
+          <p className="text-lg">
+            <strong>Founded On:</strong>{" "}
+            {new Date(adminData.started_at).toLocaleDateString()}
+          </p>
+        </div>
+
+        {/* Members Section */}
+        <div className="bg-[#1F1F1F] rounded-2xl shadow-xl p-8 lux-card hover:scale-105 transition-all duration-300">
+          <h2 className="text-3xl font-semibold mb-4 text-silver">Members</h2>
+          {adminData.members.length ? (
+            <ul className="space-y-4">
+              {adminData.members.map((member, index) => (
+                <li key={index} className="text-lg text-gray-200">
+                  {member}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No members found.</p>
+          )}
+        </div>
+
+        {/* Documents Section */}
+        <div className="bg-[#1F1F1F] rounded-2xl shadow-xl p-8 lux-card hover:scale-105 transition-all duration-300">
+          <h2 className="text-3xl font-semibold mb-4 text-diamond">
+            Documents
+          </h2>
+          {adminData.docs.length ? (
+            <ul className="space-y-4">
+              {adminData.docs.map((doc, index) => (
+                <li key={index}>
+                  <a
+                    href={doc}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:underline transition-all"
+                  >
+                    View Document {index + 1}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No documents uploaded yet.</p>
+          )}
+        </div>
       </div>
-      <div className="w-full flex gap-5 sm:px-20 h-80 flex-wrap items-center justify-center">
-        <List list={messReqs} title="mess" icon={messIcon} />
-        {graph}
-        <List list={suggestions} title="suggestions" icon={suggestionIcon} />
-      </div> */}
+
+      {/* Footer */}
+      <footer className="mt-12 text-lg text-gray-500 opacity-70">
+        Need help? Contact us at{" "}
+        <a
+          href={`mailto:${adminData.email}`}
+          className="text-blue-400 hover:underline transition-all"
+        >
+          {adminData.email}
+        </a>
+      </footer>
     </div>
   );
 }
