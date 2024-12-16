@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { 
-    getallEvent,
-    
+    getallUpcomingUserEvent,
+    getallUpcomingEvent,
     
    
 } from "../controllers/event.controller.js";
-
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 // import { orgverifyJWT } from "../middlewares/orgAuth.middleware.js";
 const router = Router()
 
@@ -13,7 +13,8 @@ const router = Router()
 //     console.log("Hello World");
 //     res.send("Hello World")
 // })
-router.route("/getUpcomingEvents").get(getallEvent)
+router.route("/getUpcomingEvents").get(getallUpcomingEvent)
+router.route("/getUpcomingUserEvents").get(verifyJWT, getallUpcomingUserEvent)
 
 // router.route("/register").post(registerUser)
 

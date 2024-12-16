@@ -91,12 +91,11 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
-  console.log("first")
+  console.log("first");
 
   return res
     .status(201)
     .json(new ApiResponse(200, createdUser, "User registered Successfully"));
-
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -108,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
   //send cookie
 
   const { email, password } = req.body;
-//   console.log(email);
+  //   console.log(email);
 
   if (!email) {
     throw new ApiError(400, "email is required");
@@ -121,20 +120,24 @@ const loginUser = asyncHandler(async (req, res) => {
   // }
 
   const user = await User.findOne({
-    email
+    email,
   });
-  console.log(user)
+  console.log(user);
 
   if (!user) {
     // throw new ApiError(404, "User does not exist");
-    return res.status(404).json(new ApiResponse(404, {}, "User does not exist"));
+    return res
+      .status(404)
+      .json(new ApiResponse(404, {}, "User does not exist"));
   }
-//   console.log(password);
+  //   console.log(password);
   const isPasswordValid = await user.isPasswordCorrect(password);
-//   console.log(isPasswordValid);
+  //   console.log(isPasswordValid);
   if (!isPasswordValid) {
     // throw new ApiError(401, "Invalid user credentials");
-    return res.status(401).json(new ApiResponse(401, {}, "Invalid user credentials"));
+    return res
+      .status(401)
+      .json(new ApiResponse(401, {}, "Invalid user credentials"));
   }
 
   const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
@@ -266,6 +269,21 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
+const participateEvent = asyncHandler(async (req, res) => {
+  const {eventId} = req.body;
+  console.log(eventId)
+  const user_id = req.user._id;
+  const eventObjectId = new mongoose.Types.ObjectId(eventId);
+  const user = await User.findByIdAndUpdate(
+    user_id,
+    { $addToSet: { upcoming_Participated: eventObjectId } },
+    { new: true }
+  );
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User fetched successfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -273,4 +291,5 @@ export {
   refreshAccessToken,
   changeCurrentPassword,
   getCurrentUser,
+  participateEvent,
 };
