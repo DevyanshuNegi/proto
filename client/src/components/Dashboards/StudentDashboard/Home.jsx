@@ -49,68 +49,62 @@ const UpcomingEvents = () => {
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([{}]);
   useEffect(() => {
-    
+    // Change to user controller new
     return () => {
-      axios.get("http://localhost:8000/api/v1/events/getUpcomingEvents").then((response) => {
-        setEvents(response.data.data);
-      })
-    }
-  }, [])
-  
+      axios
+        .get("http://localhost:8000/api/v1/events/getUpcomingEvents")
+        .then((response) => {
+          setEvents(response.data.data);
+        });
+    };
+  }, []);
+
+  // const PartcipateEvent = (eventId) => {
+  //   console.log(eventId)
+  //   const axiosInstance = axios.create({
+  //     baseURL: "http://localhost:8000/api/v1/",
+  //     withCredentials: true,
+  //   });
+  //   // eventId=eventId.toString();
+  //   axiosInstance
+  //     .post("http://localhost:8000/api/v1/users/Participate-Event", eventId, {
+  //       headers: { "Content-Type": "application/json" },
+  //       withCredentials: true,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     });
+  // };
+
+  const participateEvent = () => {
+    // upcomin_Voluteered and upcoming_Participated track will be made in User model i.e updation
+
+  };
+ 
   return (
     <div className="w-full  p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
       <h5 className="text-3xl font-semibold text-white mb-6">
         Upcoming Events
       </h5>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event, index) => (
-          <div
-            key={index}
-            className="p-4 rounded-lg bg-gray-700 shadow-md hover:shadow-xl transition-all duration-200"
-          >
-            <div className="flex flex-col items-start">
-              {/* <div className="text-blue-400">
-                {event.status.toLowerCase() === "upcoming" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-8 h-8"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-8 h-8"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 12.75l6 6 9-13.5"
-                    />
-                  </svg>
-                )}
-              </div> */}
-              <div className="text-white mt-2">
-                <p className="text-xl text-red-300 font-bold">{event.name}</p>
-                <br />
-                <p className="text-xl font-semibold">{event.description}</p>
-                <p className="text-sm text-gray-400">{event.eventDate}</p>
+        {events.map((event, index) => {
+          return (
+            <div
+              key={index}
+              className="p-4 rounded-lg bg-gray-700 shadow-md hover:shadow-xl transition-all duration-200"
+            >
+              <div className="flex flex-col items-start">
+                <div className="text-white mt-2">
+                  <p className="text-xl text-red-300 font-bold">{event.name}</p>
+                  <br />
+                  <p className="text-xl font-semibold">{event.description}</p>
+                  <p className="text-sm text-gray-400">{event.eventDate}</p>
+                </div>
+                <button onClick={participateEvent} >Participate</button>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
