@@ -82,7 +82,7 @@ export default function Index() {
     },
     {
       text: "Past Events",
-      url: "/admin-dashboard/attendance",
+      url: "/admin-dashboard/past-events",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"

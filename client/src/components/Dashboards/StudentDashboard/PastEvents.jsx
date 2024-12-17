@@ -125,7 +125,7 @@ const EventCard = ({ event }) => (
   </div>
 );
 
-const Attendance = () => (
+const PastEvents = () => (
   <div className="bg-gray-900 min-h-screen py-20">
     <div className="max-w-6xl mx-auto px-4">
       <h1 className="text-5xl font-bold text-white text-center mb-10">
@@ -151,4 +151,4 @@ const Attendance = () => (
   </div>
 );
 
-export default Attendance;
+export default PastEvents;

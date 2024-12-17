@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Modal } from "./Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Loader } from "../../Dashboards/Common/Loader";
+import { Loader } from "../Common/Loader";
 import axios from "axios";
 
-const Attendance = () => {
+const PastEvents = () => {
   // const [loading, setLoading] = useState(false);
   // const [events, setEvents] = useState([{}]);
   // useEffect(() => {
@@ -151,4 +151,4 @@ function Suggestions() {
   );
 }
 
-export default Attendance;
+export default PastEvents;
