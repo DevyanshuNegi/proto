@@ -64,17 +64,23 @@ const organisationSchema = new Schema(
 organisationSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
 
-    this.password = bcrypt.hash(this.password, 10)
+    this.password =await bcrypt.hash(this.password, 10)
     next()
 })
 
+// organisationSchema.methods.isPasswordCorrect = async function (password) {
+//     console.log("pass ", password);
+//     console.log("this pass", this.password);
+//     // return password===this.password;
+//     return await bcrypt.compare(password, this.password)
+//     // return await bcrypt.compare(password, this.password);
+// }
+
 organisationSchema.methods.isPasswordCorrect = async function (password) {
-    console.log("pass ", password);
-    console.log("this pass", this.password);
-    return password===this.password;
-    // return await bcrypt.compare(password, this.password)
-    // return await bcrypt.compare(password, this.password);
-}
+  console.log("use pass ",password)
+  console.log("this pass ", this.password)
+  return await bcrypt.compare(password, this.password);
+};
 
 organisationSchema.methods.generateAccessToken = function () {
     return jwt.sign(

@@ -13,7 +13,7 @@ const router = Router()
 //     console.log("Hello World");
 //     res.send("Hello World")
 // })
-router.route("/getUpcomingEvents").get(getallUpcomingEvent)
+router.route("/getUpcomingEvents").get(verifyJWT, getallUpcomingEvent)
 router.route("/getUpcomingUserEvents").get(verifyJWT, getallUpcomingUserEvent)
 
 // router.route("/register").post(registerUser)

@@ -4,60 +4,23 @@ import axios from "axios";
 
 // List Component for displaying upcoming events
 const UpcomingEvents = () => {
-  // const [upcomingEvents, setUpcomingEvents] = useState([
-  //   {
-  //     title: "AI Workshop 2024",
-  //     date: "15-12-2024",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Data Science Bootcamp",
-  //     date: "10-01-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Web Development Conference",
-  //     date: "22-02-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Machine Learning Summit",
-  //     date: "05-03-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Cloud Computing Symposium",
-  //     date: "12-04-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Blockchain Innovation Forum",
-  //     date: "25-05-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Cybersecurity Awareness Webinar",
-  //     date: "30-06-2025",
-  //     status: "upcoming",
-  //   },
-  //   {
-  //     title: "Tech Innovators Meetup",
-  //     date: "15-07-2025",
-  //     status: "upcoming",
-  //   },
-  // ]);
+
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState([{}]);
   useEffect(() => {
     // Change to user controller new
     return () => {
       axios
-        .get("http://localhost:8000/api/v1/events/getUpcomingEvents")
+        .get("http://localhost:8000/api/v1/events/getUpcomingEvents",{
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,})
         .then((response) => {
           setEvents(response.data.data);
+          console.log("Events: ", response.data.data[0]);
         });
     };
-  }, []);
+  }, [navigate]);
 
   // const PartcipateEvent = (eventId) => {
   //   console.log(eventId)
@@ -76,11 +39,31 @@ const UpcomingEvents = () => {
   //     });
   // };
 
-  const participateEvent = () => {
+  const participateEvent = (eventId) => {
+    console.log(eventId)
     // upcomin_Voluteered and upcoming_Participated track will be made in User model i.e updation
+    // const axiosInstance = axios.create({
+    //   baseURL: "http://localhost:8000/api/v1/",
+    //   withCredentials: true,
+    // });
 
+    axios
+      .post("http://localhost:8000/api/v1/users/participate-Event", {eventId} ,{
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        // ParticipateEvent(eventId);
+        window.location.reload(); // Refresh page to reflect updated status
+      })
+      .catch((error) => {
+        console.error("Error Participating", error);
+
+      });
+    
   };
- 
+
   return (
     <div className="w-full  p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
       <h5 className="text-3xl font-semibold text-white mb-6">
@@ -100,7 +83,9 @@ const UpcomingEvents = () => {
                   <p className="text-xl font-semibold">{event.description}</p>
                   <p className="text-sm text-gray-400">{event.eventDate}</p>
                 </div>
-                <button onClick={participateEvent} >Participate</button>
+                <button onClick={() => participateEvent(event._id)} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+                  Participate
+                </button>
               </div>
             </div>
           );
@@ -133,7 +118,7 @@ function Home() {
         console.error("Error fetching user data", error);
         navigate("/auth/user-login");
       });
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="w-full h-screen flex flex-col  items-center gap-8 overflow-y-auto pt-20 px-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">

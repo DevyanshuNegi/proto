@@ -1,8 +1,8 @@
 import { Input } from "./Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Loader } from "../../Dashboards/Common/Loader";
 import axios from "axios";
 
@@ -20,7 +20,11 @@ export default function AdminSignIn() {
       baseURL: "http://localhost:8000/api/v1/",
       withCredentials: true,
     });
-    axiosInstance.post("http://localhost:8000/api/v1/organisation/login", data, { headers: { 'Content-Type': 'application/json' } })
+    axiosInstance
+      .post("organisation/login", data, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      })
       .then((response) => {
         // console.log("response", response);
         // setUser(response.data.data.user);
@@ -36,8 +40,7 @@ export default function AdminSignIn() {
         const statusCode = error.response.status;
         let errorMessage = error.response.data.message;
 
-        toast.error(
-          errorMessage, {
+        toast.error(errorMessage, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
@@ -46,7 +49,7 @@ export default function AdminSignIn() {
           draggable: true,
           progress: undefined,
           theme: "dark",
-        })
+        });
       });
     setLoader(false);
   };

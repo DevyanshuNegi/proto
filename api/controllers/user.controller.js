@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import {Event} from "../models/event.model.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
@@ -270,18 +271,29 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const participateEvent = asyncHandler(async (req, res) => {
-  const {eventId} = req.body;
-  console.log(eventId)
+  const { eventId } = req.body;
+  console.log(eventId);
   const user_id = req.user._id;
-  const eventObjectId = new mongoose.Types.ObjectId(eventId);
+  // const eventObjectId = new mongoose.Types.ObjectId(eventId);
+  const event = await Event.findById(eventId);
+  console.log(event)
+  if (!event) {
+    return res.status(404).json({ message: "Event not found" });
+  }
   const user = await User.findByIdAndUpdate(
     user_id,
-    { $addToSet: { upcoming_Participated: eventObjectId } },
+    { $addToSet: { upcomming_Participated: event._id } },
+    { new: true }
+  );
+
+  const eventData= await Event.findByIdAndUpdate(
+    eventId,
+    { $addToSet: { participants: user_id } },
     { new: true }
   );
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "User fetched successfully"));
+    .json(new ApiResponse(200, `user- ${user} and event- ${eventData}`, "Added to Event successfully"));
 });
 
 export {

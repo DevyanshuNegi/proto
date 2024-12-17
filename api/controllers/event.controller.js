@@ -5,15 +5,16 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import mongoose from "mongoose";
 import { Organisation } from "../models/organisation.model.js";
 import { Event } from "../models/event.model.js";
+import { User } from "../models/user.model.js";
 
 const getallUpcomingEvent = asyncHandler(async (req, res) => {
   const events = await Event.aggregate([
     {
       $match: {
-        eventDate: { $gt: new Date() }
+        eventDate: { $gt: new Date() },
+        participants: { $ne: new mongoose.Types.ObjectId(req.user._id) },
       },
     },
-
     {
       $project: {
         name: 1,
@@ -24,6 +25,7 @@ const getallUpcomingEvent = asyncHandler(async (req, res) => {
       },
     },
   ]);
+  console.log("req._id: " , req.user._id)
   return res
     .status(201)
     .json(new ApiResponse(201, events, "Event added successfully"));
