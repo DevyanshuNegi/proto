@@ -296,6 +296,59 @@ const participateEvent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, `user- ${user} and event- ${eventData}`, "Added to Event successfully"));
 });
 
+const pastEvents = asyncHandler(async (req, res) => {
+  const user_id = req.user._id;
+  const user = await User.findById(user_id);
+  console.log("user ", user);
+
+
+
+  const aggregateQuery = [
+    {
+      $match: { _id: user_id }
+    },
+    {
+      $lookup: {
+        from: 'events', // The name of the collection where events are stored
+        localField: 'past_Volunteered',
+        foreignField: '_id',
+        as: 'pastVolunteeredEvents'
+      }
+    },
+    {
+      $lookup: {
+        from: 'events',
+        localField: 'past_Participated',
+        foreignField: '_id',
+        as: 'pastParticipatedEvents'
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1, // Include other user fields as needed
+        pastVolunteeredEvents: 1,
+        pastParticipatedEvents: 1
+      }
+    }
+  ];
+
+  // Assuming you have a User model
+  const events = User.aggregate(aggregateQuery).exec((err, result) => {
+    if (err) {
+      console.error('Error executing aggregate query:', err);
+    } else {
+      console.log('Aggregate query result:', result);
+    }
+  });
+
+
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, events, "Past events fetched successfully"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -304,4 +357,6 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   participateEvent,
+  pastEvents,
+
 };
