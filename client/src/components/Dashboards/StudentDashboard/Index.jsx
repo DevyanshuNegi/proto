@@ -85,7 +85,7 @@ export default function Index() {
     // },
     {
       text: "Past Events",
-      url: "/student-dashboard/attendance",
+      url: "/student-dashboard/past-events",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@ export default function Index() {
     },
     {
       text: "Donation",
-      url: "/student-dashboard/invoices",
+      url: "/student-dashboard/donations",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
