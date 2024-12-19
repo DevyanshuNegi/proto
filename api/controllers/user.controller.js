@@ -3,7 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { Event } from "../models/event.model.js";
+import {Event} from "../models/event.model.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
@@ -276,7 +276,7 @@ const participateEvent = asyncHandler(async (req, res) => {
   const user_id = req.user._id;
   // const eventObjectId = new mongoose.Types.ObjectId(eventId);
   const event = await Event.findById(eventId);
-  console.log(event);
+  console.log(event)
   if (!event) {
     return res.status(404).json({ message: "Event not found" });
   }
@@ -286,42 +286,14 @@ const participateEvent = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  const eventData = await Event.findByIdAndUpdate(
+  const eventData= await Event.findByIdAndUpdate(
     eventId,
     { $addToSet: { participants: user_id } },
     { new: true }
   );
   return res
     .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        `user- ${user} and event- ${eventData}`,
-        "Added to Event successfully"
-      )
-    );
-});
-
-const pastEvents = asyncHandler(async (req, res) => {
-  // const user = await User.findById(req.user._id);
-  // if (!user) {
-  //   return res.status(404).json({ message: "User not found" });
-  // }
-  // const volunteeredEventIds = user.past_Volunteered;
-  // const events = await Event.find({ _id: { $in: volunteeredEventIds } });
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Set to the beginning of the day
-
-  const events = await Event.find({
-    participants: { $in: [req.user._id] },
-    eventDate: { $lt: today },
-  }).sort({ eventDate: -1 }); // Sort by eventDate in descending order
-
-  console.log("All the events-",events)
-
-  return res.status(200).json(new ApiResponse(200, events, "Password changed successfully"));
-  // return res.status(200).json({ events });
+    .json(new ApiResponse(200, `user- ${user} and event- ${eventData}`, "Added to Event successfully"));
 });
 
 export {
@@ -332,5 +304,4 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   participateEvent,
-  pastEvents,
 };
