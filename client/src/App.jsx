@@ -54,7 +54,7 @@ function App() {
           <Route path='register-student' element={<RegisterStudent />} />
           <Route path="past-events" element={<AdminPastEvents />} />
           <Route path="complaints" element={<AdminComplaints />} />
-          <Route path="invoices" element={<AdminInvoices/>} />
+          <Route path="upcoming-events" element={<AdminInvoices/>} />
           <Route path="all-events" element={<AdminSuggestions/>} />
           <Route path="settings" element={<AdminSettings/>} />
           <Route path="add-event" element={<AddEvent />} />

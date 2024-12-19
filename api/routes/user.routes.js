@@ -7,6 +7,7 @@ import {
     changeCurrentPassword, 
     getCurrentUser, 
     participateEvent,
+    pastEvents,
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -24,6 +25,7 @@ router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 router.route("/current-user").get(verifyJWT, getCurrentUser)
 router.route("/participate-Event").post(verifyJWT, participateEvent)
+router.route("/past-Event").get(verifyJWT, pastEvents)
 // router.route("/add-participateEvent-to-org").post(verifyJWT, participateEvent)
 
     

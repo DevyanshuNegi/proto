@@ -36,8 +36,8 @@ const organisationSchema = new Schema(
         },
         members: [
             {
-                type: Schema.Types.ObjectId,
-                ref: "User"
+                type: String,
+                // ref: "User"
             }
         ],
         docs: [

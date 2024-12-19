@@ -26,7 +26,7 @@ const PastEvents = () => {
       });
       // let name;
       axiosInstance
-        .get("http://localhost:8000/api/v1/organisation/getAll-events")
+        .get("http://localhost:8000/api/v1/organisation/past-events")
         .then((response) => {
           setEvents(response.data.data);
         });
@@ -34,6 +34,10 @@ const PastEvents = () => {
   }, []);
   return (
     <div className="w-full  p-6 rounded-xl shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 drop-shadow-2xl overflow-y-auto">
+      <h1 className="text-3xl font-bold text-white text-center mb-6">
+        Past Events
+      </h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {events.map((event, index) => (
           <div

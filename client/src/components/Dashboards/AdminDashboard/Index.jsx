@@ -21,13 +21,13 @@ export default function Index() {
           withCredentials: true,
         })
         .then((response) => {
-          console.log("Logged In ^_^");
-          console.log(response);
-          console.log(response.data.data.name);
+          // console.log("/Logged In ^_^");
+          // console.log(response);
+          // console.log(response.data.data.name);
           const newItem = response.data.data;
           setResponsedata(newItem);
-          console.log("Hii");
-          console.log(responsedata);
+          // console.log("Hii");
+          // console.log(responsedata);
           // responsedata=response.data.data.user;
         })
         .catch((error) => {
@@ -101,8 +101,8 @@ export default function Index() {
       ),
     },
     {
-      text: "Invoices",
-      url: "/admin-dashboard/invoices",
+      text: "Upcoming Events",
+      url: "/admin-dashboard/upcoming-events",
       svg: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
