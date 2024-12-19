@@ -7,6 +7,11 @@ import {
     changeCurrentPassword, 
     getCurrentUser, 
     participateEvent,
+<<<<<<< HEAD
+    pastEvents,
+
+=======
+>>>>>>> parent of 953e1ad (made api and pages for past events)
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
