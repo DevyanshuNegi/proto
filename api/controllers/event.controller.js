@@ -33,6 +33,7 @@ const getallUpcomingEvent = asyncHandler(async (req, res) => {
 
 
 const getallUpcomingUserEvent = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
   const events = await Event.aggregate([
     {
       $match: {

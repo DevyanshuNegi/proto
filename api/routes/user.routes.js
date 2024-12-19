@@ -8,6 +8,7 @@ import {
     getCurrentUser, 
     participateEvent,
     pastEvents,
+    pastEvents,
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
