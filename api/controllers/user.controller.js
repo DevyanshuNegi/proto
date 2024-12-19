@@ -296,6 +296,53 @@ const participateEvent = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, `user- ${user} and event- ${eventData}`, "Added to Event successfully"));
 });
 
+const pastEvents = asyncHandler(async (req, res) => {
+  console.log("first get all events saved ^_^");
+  // console.log(req.organisation._id)
+  // const events = await Event.aggregate([
+  //   { $match: { organisedBy: new mongoose.Types.ObjectId(req.organisation._id) } },
+  // ]);
+  // const events = await Event.find({ organizedBy: req.organisation._id });
+  // console.log(events);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set to the beginning of the day
+  const events = await Event.find({
+    organizedBy: req.organisation._id,
+    eventDate: { $lt: today },
+  }).sort({ eventDate: -1 }); // Sort by eventDate in descending order
+  return res
+    .status(201)
+    .json(new ApiResponse(201, events, "Event added successfully"));
+});
+// const upcomingEvents = asyncHandler(async (req, res) => {
+//   console.log("first get all events saved ^_^");
+//   // console.log(req.organisation._id)
+//   // const events = await Event.aggregate([
+//   //   { $match: { organisedBy: new mongoose.Types.ObjectId(req.organisation._id) } },
+//   // ]);
+//   // const events = await Event.find({ organizedBy: req.organisation._id });
+//   // console.log(events);
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0); // Set to the beginning of the day
+//   const events = await Event.find({
+//     organizedBy: req.organisation._id,
+//     eventDate: { $gt: today },
+//   }).sort({ eventDate: 1 }); 
+//   return res
+//     .status(201)
+//     .json(new ApiResponse(201, events, "Event added successfully"));
+// });
+// const getAllEvents = asyncHandler(async (req, res) => {
+//   console.log("first get all events saved ^_^");
+//   // console.log(req.organisation._id)
+
+//   const events = await Event.find({ organizedBy: req.organisation._id });
+//   console.log(events);
+//   return res
+//     .status(201)
+//     .json(new ApiResponse(201, events, "Event added successfully"));
+//  });
+
 export {
   registerUser,
   loginUser,
@@ -304,4 +351,7 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   participateEvent,
+  pastEvents,
+  // upcomingEvents,
+  // getAllEvents,
 };
